@@ -789,6 +789,15 @@
         <label style="display: block; font-size: 14px; font-weight: 600; color: #4b5563; margin-bottom: 8px;">Nameservers (optional)</label>
         <input type="text" id="zoneNameservers" name="zoneNameservers" placeholder="ns1.example.com, ns2.example.com" style="width: 100%; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 14px; font-family: inherit; transition: border-color 0.2s;">
       </div>
+
+      <!-- Auto-generate IPs for Reverse Zone -->
+      <div id="autoGenerateIPContainer" style="margin-bottom: 20px; padding: 16px; background: #f0f7ff; border: 1px solid #bae6fd; border-radius: 8px; display: none;">
+        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 14px; color: #1e40af;">
+          <input type="checkbox" id="autoGenerateIPs" name="autoGenerateIPs" style="width: 18px; height: 18px; cursor: pointer;">
+          <span style="font-weight: 600;">Auto-generate PTR records (1-254)</span>
+        </label>
+        <p style="font-size: 12px; color: #0369a1; margin: 8px 0 0 0;">Creates A records for IPs 1-254 in this reverse zone</p>
+      </div>
       
       <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 32px; padding-top: 24px; border-top: 1px solid #e2e8f0;">
         <button type="button" class="btn btn-secondary" onclick="closeCreateZoneModal()">Cancel</button>
@@ -819,6 +828,11 @@
     if (zoneId) {
       viewZoneDetails(zoneId);
     }
+
+    // Add listener to zone name field to detect reverse zones
+    const zoneNameInput = document.getElementById('zoneName');
+    zoneNameInput.addEventListener('change', checkIfReverseZone);
+    zoneNameInput.addEventListener('keyup', checkIfReverseZone);
   });
 
   // Load zones from API
@@ -1110,6 +1124,20 @@
     modal.classList.add('show');
   }
 
+  // Check if zone name is a reverse zone (PTR)
+  function checkIfReverseZone() {
+    const zoneName = document.getElementById('zoneName').value.toLowerCase();
+    const isReverseZone = zoneName.includes('in-addr.arpa') || zoneName.includes('ip6.arpa');
+    
+    const autoGenContainer = document.getElementById('autoGenerateIPContainer');
+    if (isReverseZone) {
+      autoGenContainer.style.display = 'block';
+    } else {
+      autoGenContainer.style.display = 'none';
+      document.getElementById('autoGenerateIPs').checked = false;
+    }
+  }
+
   function closeCreateZoneModal() {
     const modal = document.getElementById('createZoneModal');
     modal.classList.remove('show');
@@ -1121,6 +1149,7 @@
     
     const zoneName = document.getElementById('zoneName').value;
     const zoneType = document.getElementById('zoneType').value;
+    const autoGenerateIPs = document.getElementById('autoGenerateIPs').checked;
     
     if (!zoneName || !zoneType) {
       showError('Please fill in all required fields');
@@ -1144,12 +1173,71 @@
         const error = await response.json().catch(() => ({}));
         throw new Error(error.error || 'Failed to create zone');
       }
+
+      const createdZone = await response.json();
+      
+      // Auto-generate PTR records if checkbox is checked
+      if (autoGenerateIPs && zoneName.includes('in-addr.arpa')) {
+        await autoGeneratePTRRecords(createdZone.id, zoneName);
+        showError('Zone created and PTR records generated successfully!', 'success');
+      } else {
+        showError('Zone created successfully!', 'success');
+      }
       
       closeCreateZoneModal();
       await loadZones();
-      showError('Zone created successfully!', 'success');
     } catch (error) {
       showError(error.message);
+    }
+  }
+
+  // Auto-generate PTR records for reverse zones
+  async function autoGeneratePTRRecords(zoneId, zoneName) {
+    try {
+      // Extract the network part from the zone name (e.g., "103.142.214" from "214.142.103.in-addr.arpa")
+      const parts = zoneName.replace('.in-addr.arpa', '').split('.').reverse();
+      const networkPrefix = parts.join('.');
+      
+      // Generate records for IPs 1-254
+      const recordsToCreate = [];
+      for (let i = 1; i <= 254; i++) {
+        const ipOctet = i.toString();
+        recordsToCreate.push({
+          name: `${ipOctet}.${zoneName}`,
+          type: 'A',
+          ttl: 3600,
+          changetype: 'REPLACE',
+          records: [
+            {
+              content: `${networkPrefix}.${i}`,
+              disabled: false
+            }
+          ]
+        });
+      }
+
+      // Create records in batches to avoid overwhelming the API
+      const batchSize = 10;
+      for (let i = 0; i < recordsToCreate.length; i += batchSize) {
+        const batch = recordsToCreate.slice(i, i + batchSize);
+        
+        const patchResponse = await fetch(`/api/servers/localhost/zones/${zoneId}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            rrsets: batch
+          })
+        });
+
+        if (!patchResponse.ok) {
+          console.warn(`Warning: Some records may not have been created (batch ${Math.floor(i/batchSize) + 1})`);
+        }
+      }
+    } catch (error) {
+      console.error('Error auto-generating PTR records:', error);
+      showError(`Zone created but auto-generation had issues: ${error.message}`, 'warning');
     }
   }
 
