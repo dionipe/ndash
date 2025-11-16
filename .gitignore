@@ -103,3 +103,7 @@ dist
 *.swp
 *.swo
 *~
+
+# Local cookies file generated during development — contains sensitive session tokens
+# Do not commit
+cookies.txt
