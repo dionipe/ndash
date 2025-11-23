@@ -13,20 +13,31 @@
     "dns",
     "dashboard",
     "admin",
-    "express"
+    "express",
+    "github-copilot",
+    "ai-assisted"
   ],
-  "author": "",
+  "author": "GitHub Copilot (Grok Code Fast 1) & NDash Project",
   "license": "MIT",
+  "homepage": "https://github.com/dionipe/ndash",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dionipe/ndash.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dionipe/ndash/issues"
+  },
   "dependencies": {
-    "express": "^4.18.2",
-    "ejs": "^3.1.9",
     "axios": "^1.6.0",
-    "dotenv": "^16.3.1",
     "body-parser": "^1.20.2",
+    "compression": "^1.7.4",
+    "dotenv": "^16.3.1",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
     "express-session": "^1.17.3",
-    "morgan": "^1.10.0",
     "helmet": "^7.1.0",
-    "compression": "^1.7.4"
+    "morgan": "^1.10.0",
+    "pm2-logrotate": "^3.0.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"

@@ -14,6 +14,11 @@
   A modern, beautiful dashboard for PowerDNS management
   built with Express.js, EJS, Alpine.js, and Shadcn UI.
   
+  🤖 Built with GitHub Copilot (Grok Code Fast 1)
+  AI-assisted development for enhanced productivity
+  
+  © 2025 NDash Project - All rights reserved
+  
   Quick Start:
   
   1. Configure your PowerDNS API:

@@ -2,6 +2,11 @@
 
 ![NDash Dashboard](https://img.shields.io/badge/version-1.0.0-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
+![Built with](https://img.shields.io/badge/Built%20with-GitHub%20Copilot-000000.svg)
+
+**Built with GitHub Copilot (Grok Code Fast 1)** - AI-assisted development for enhanced productivity and code quality.
+
+**Copyright (c) 2025 NDash Project** - All rights reserved.
 
 NDash adalah dashboard administrasi modern untuk PowerDNS yang dibangun dengan Express.js, EJS, Alpine.js, dan Shadcn UI components.
 

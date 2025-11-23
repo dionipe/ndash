@@ -1,0 +1,23 @@
+[
+  {
+    "id": "pdns",
+    "name": "PowerDNS",
+    "type": "systemctl",
+    "target": "pdns",
+    "enabled": true
+  },
+  {
+    "id": "ssh",
+    "name": "SSH",
+    "type": "systemctl",
+    "target": "ssh",
+    "enabled": true
+  },
+  {
+    "id": "mysql",
+    "name": "MySQL",
+    "type": "systemctl",
+    "target": "mysql",
+    "enabled": true
+  }
+]

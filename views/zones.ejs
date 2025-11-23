@@ -681,6 +681,37 @@
         <label style="display: block; font-size: 14px; font-weight: 600; color: #4b5563; margin-bottom: 8px;">Content *</label>
         <textarea id="recordContent" required placeholder="e.g., 192.168.1.1 for A record" style="width: 100%; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 14px; font-family: monospace; min-height: 80px; resize: vertical;"></textarea>
       </div>
+
+      <!-- Split-Horizon Options -->
+      <div style="margin-bottom: 20px; padding: 16px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;">
+        <label style="display: flex; align-items: center; font-size: 14px; font-weight: 600; color: #4b5563; margin-bottom: 12px; cursor: pointer;">
+          <input type="checkbox" id="enableSplitHorizon" style="margin-right: 8px; cursor: pointer;" onchange="toggleSplitHorizonOptions()">
+          <svg data-lucide="git-branch" style="width: 16px; height: 16px; margin-right: 6px;"></svg>
+          Enable Split-Horizon DNS
+        </label>
+        
+        <div id="splitHorizonOptions" style="display: none;">
+          <div style="margin-bottom: 12px; padding: 8px; background: #e0e7ff; border-radius: 4px; font-size: 12px; color: #3730a3;">
+            <strong>Split-Horizon:</strong> Different responses for internal vs external clients
+          </div>
+          
+          <div style="margin-bottom: 12px;">
+            <label style="display: block; font-size: 13px; font-weight: 600; color: #4b5563; margin-bottom: 6px;">Internal Content (for private subnets)</label>
+            <textarea id="recordContentInternal" placeholder="Content for internal clients (192.168.x.x, 10.x.x.x, 172.16.x.x)" style="width: 100%; padding: 8px 10px; border: 1px solid #cbd5e0; border-radius: 4px; font-size: 13px; font-family: monospace; min-height: 60px; resize: vertical;"></textarea>
+            <small style="color: #718096; font-size: 11px;">Leave empty to use main content for internal clients</small>
+          </div>
+          
+          <div style="margin-bottom: 12px;">
+            <label style="display: block; font-size: 13px; font-weight: 600; color: #4b5563; margin-bottom: 6px;">External Content (for public internet)</label>
+            <textarea id="recordContentExternal" placeholder="Content for external clients (0.0.0.0/0)" style="width: 100%; padding: 8px 10px; border: 1px solid #cbd5e0; border-radius: 4px; font-size: 13px; font-family: monospace; min-height: 60px; resize: vertical;"></textarea>
+            <small style="color: #718096; font-size: 11px;">Leave empty to use main content for external clients</small>
+          </div>
+          
+          <div style="padding: 8px; background: #fef3c7; border-radius: 4px; font-size: 12px; color: #92400e;">
+            <strong>Note:</strong> Split-Horizon requires server configuration. Configure subnets in Settings → Split-Horizon DNS.
+          </div>
+        </div>
+      </div>
       
       <div style="display: flex; gap: 12px; justify-content: flex-end;">
         <button type="button" class="btn btn-secondary" onclick="closeAddRecordModal()">Cancel</button>
@@ -1359,6 +1390,7 @@
     document.getElementById('addRecordForm').reset();
   }
 
+  // Modified submitAddRecord to handle Split-Horizon
   async function submitAddRecord(event) {
     event.preventDefault();
     
@@ -1380,6 +1412,11 @@
       if (!zone) {
         throw new Error('Zone not found');
       }
+      
+      // Check if Split-Horizon is enabled
+      const splitHorizonEnabled = document.getElementById('enableSplitHorizon').checked;
+      const internalContent = document.getElementById('recordContentInternal').value.trim();
+      const externalContent = document.getElementById('recordContentExternal').value.trim();
       
       // Validate record content based on type
       let validatedContent = recordContent;
@@ -1414,46 +1451,83 @@
         }
       }
       
-      // Determine changetype and handle special cases
-      let changetype = 'REPLACE';
-      let records = [{
-        content: validatedContent,
-        disabled: false
-      }];
+      // Handle Split-Horizon records
+      let rrsets = [];
       
-      // Special handling for NS records - allow multiple nameservers
-      if (recordType === 'NS') {
-        try {
-          // Get existing zone data to check for existing NS records
-          const zoneResponse = await fetch(`/api/servers/localhost/zones/${zoneId}`);
-          if (zoneResponse.ok) {
-            const zoneData = await zoneResponse.json();
-            const existingNSRecords = zoneData.rrsets?.find(rrset => 
-              rrset.name === fullName && rrset.type === 'NS'
-            );
-            
-            if (existingNSRecords && existingNSRecords.records) {
-              // Add new record to existing ones
-              records = [...existingNSRecords.records, {
-                content: validatedContent,
-                disabled: false
-              }];
-            }
-          }
-        } catch (error) {
-          console.warn('Could not fetch existing NS records, proceeding with single record:', error);
+      if (splitHorizonEnabled && (internalContent || externalContent)) {
+        // Check if global Split-Horizon is enabled
+        const globalSplitHorizon = await checkSplitHorizonEnabled();
+        if (!globalSplitHorizon) {
+          throw new Error('Split-Horizon is not enabled globally. Please enable it in Settings → Split-Horizon DNS first.');
         }
-      }
-      
-      const payload = {
-        rrsets: [{
+        
+        // Create separate rrsets for internal and external
+        if (internalContent) {
+          rrsets.push({
+            name: fullName,
+            type: recordType,
+            ttl: parseInt(recordTTL),
+            changetype: 'REPLACE',
+            records: [{
+              content: internalContent,
+              disabled: false
+            }]
+          });
+        }
+        
+        if (externalContent) {
+          rrsets.push({
+            name: fullName,
+            type: recordType,
+            ttl: parseInt(recordTTL),
+            changetype: 'REPLACE',
+            records: [{
+              content: externalContent,
+              disabled: false
+            }]
+          });
+        }
+      } else {
+        // Standard record creation
+        let records = [{
+          content: validatedContent,
+          disabled: false
+        }];
+        
+        // Special handling for NS records - allow multiple nameservers
+        if (recordType === 'NS') {
+          try {
+            // Get existing zone data to check for existing NS records
+            const zoneResponse = await fetch(`/api/servers/localhost/zones/${zoneId}`);
+            if (zoneResponse.ok) {
+              const zoneData = await zoneResponse.json();
+              const existingNSRecords = zoneData.rrsets?.find(rrset => 
+                rrset.name === fullName && rrset.type === 'NS'
+              );
+              
+              if (existingNSRecords && existingNSRecords.records) {
+                // Add new record to existing ones
+                records = [...existingNSRecords.records, {
+                  content: validatedContent,
+                  disabled: false
+                }];
+              }
+            }
+          } catch (error) {
+            console.warn('Could not fetch existing NS records, proceeding with single record:', error);
+          }
+        }
+        
+        rrsets = [{
           name: fullName,
           type: recordType,
           ttl: parseInt(recordTTL),
-          changetype: changetype,
+          changetype: 'REPLACE',
           records: records
-        }]
-      };
+        }];
+      }
+      
+      const payload = { rrsets };
       
       const response = await fetch(`/api/servers/localhost/zones/${zoneId}`, {
         method: 'PATCH',
@@ -1649,7 +1723,212 @@
       showError(error.message);
     }
   }
+
+  // Initialize Split-Horizon checkbox event listener
+  document.addEventListener('DOMContentLoaded', function() {
+    const splitHorizonCheckbox = document.getElementById('enableSplitHorizon');
+    if (splitHorizonCheckbox) {
+      splitHorizonCheckbox.addEventListener('change', toggleSplitHorizonOptions);
+      // Initialize state
+      toggleSplitHorizonOptions();
+    }
+  });
 </script>
+
+<script>
+  // Split-Horizon functions for zones
+  function toggleSplitHorizonOptions() {
+    const checkbox = document.getElementById('enableSplitHorizon');
+    const options = document.getElementById('splitHorizonOptions');
+    
+    if (checkbox.checked) {
+      options.style.display = 'block';
+    } else {
+      options.style.display = 'none';
+      // Clear split-horizon fields when disabled
+      document.getElementById('recordContentInternal').value = '';
+      document.getElementById('recordContentExternal').value = '';
+    }
+  }
+
+  async function checkSplitHorizonEnabled() {
+    try {
+      const response = await fetch('/api/split-horizon/config');
+      const config = await response.json();
+      return config.enabled;
+    } catch (error) {
+      console.error('Error checking split-horizon status:', error);
+      return false;
+    }
+  }
+
+  // Modified submitAddRecord to handle Split-Horizon
+  async function submitAddRecord(event) {
+    event.preventDefault();
+    
+    const recordName = document.getElementById('recordName').value.trim();
+    const recordType = document.getElementById('recordType').value;
+    const recordTTL = document.getElementById('recordTTL').value;
+    const recordContent = document.getElementById('recordContent').value.trim();
+    const zoneId = appState.currentZoneId;
+    
+    if (!zoneId || !recordName || !recordType || !recordTTL || !recordContent) {
+      showError('Please fill in all required fields');
+      return;
+    }
+    
+    try {
+      // Find the zone to get its name
+      const zones = appState.zones;
+      const zone = zones.find(z => z.id === zoneId);
+      if (!zone) {
+        throw new Error('Zone not found');
+      }
+      
+      // Check if Split-Horizon is enabled
+      const splitHorizonEnabled = document.getElementById('enableSplitHorizon').checked;
+      const internalContent = document.getElementById('recordContentInternal').value.trim();
+      const externalContent = document.getElementById('recordContentExternal').value.trim();
+      
+      // Validate record content based on type
+      let validatedContent = recordContent;
+      if (recordType === 'NS') {
+        // NS records must be FQDN with trailing dot
+        if (!validatedContent.endsWith('.')) {
+          validatedContent = validatedContent + '.';
+        }
+        // Basic validation for FQDN format
+        if (!/^[a-zA-Z0-9.-]+\.$/.test(validatedContent)) {
+          throw new Error('NS record content must be a valid FQDN (fully qualified domain name) ending with a dot');
+        }
+      }
+      
+      // Build full record name (FQDN)
+      let fullName = recordName;
+      if (!recordName.endsWith('.')) {
+        // Handle "@" as shorthand for root domain
+        if (recordName === '@') {
+          fullName = zone.name;
+        } else {
+          // Check if this is a reverse zone (in-addr.arpa)
+          if (zone.name.includes('in-addr.arpa')) {
+            // For reverse zones, if recordName is an IP address part (like "1"), 
+            // prepend it directly to the zone name
+            // e.g., "1" + "214.142.103.in-addr.arpa." = "1.214.142.103.in-addr.arpa."
+            fullName = recordName + '.' + zone.name;
+          } else {
+            // For forward zones, append zone name normally
+            fullName = recordName + '.' + zone.name;
+          }
+        }
+      }
+      
+      // Handle Split-Horizon records
+      let rrsets = [];
+      
+      if (splitHorizonEnabled && (internalContent || externalContent)) {
+        // Check if global Split-Horizon is enabled
+        const globalSplitHorizon = await checkSplitHorizonEnabled();
+        if (!globalSplitHorizon) {
+          throw new Error('Split-Horizon is not enabled globally. Please enable it in Settings → Split-Horizon DNS first.');
+        }
+        
+        // Create separate rrsets for internal and external
+        if (internalContent) {
+          rrsets.push({
+            name: fullName,
+            type: recordType,
+            ttl: parseInt(recordTTL),
+            changetype: 'REPLACE',
+            records: [{
+              content: internalContent,
+              disabled: false
+            }]
+          });
+        }
+        
+        if (externalContent) {
+          rrsets.push({
+            name: fullName,
+            type: recordType,
+            ttl: parseInt(recordTTL),
+            changetype: 'REPLACE',
+            records: [{
+              content: externalContent,
+              disabled: false
+            }]
+          });
+        }
+      } else {
+        // Standard record creation
+        let records = [{
+          content: validatedContent,
+          disabled: false
+        }];
+        
+        // Special handling for NS records - allow multiple nameservers
+        if (recordType === 'NS') {
+          try {
+            // Get existing zone data to check for existing NS records
+            const zoneResponse = await fetch(`/api/servers/localhost/zones/${zoneId}`);
+            if (zoneResponse.ok) {
+              const zoneData = await zoneResponse.json();
+              const existingNSRecords = zoneData.rrsets?.find(rrset => 
+                rrset.name === fullName && rrset.type === 'NS'
+              );
+              
+              if (existingNSRecords && existingNSRecords.records) {
+                // Add new record to existing ones
+                records = [...existingNSRecords.records, {
+                  content: validatedContent,
+                  disabled: false
+                }];
+              }
+            }
+          } catch (error) {
+            console.warn('Could not fetch existing NS records, proceeding with single record:', error);
+          }
+        }
+        
+        rrsets = [{
+          name: fullName,
+          type: recordType,
+          ttl: parseInt(recordTTL),
+          changetype: 'REPLACE',
+          records: records
+        }];
+      }
+      
+      const payload = { rrsets };
+      
+      const response = await fetch(`/api/servers/localhost/zones/${zoneId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload)
+      });
+      
+      if (!response.ok) {
+        const responseText = await response.text();
+        try {
+          const error = JSON.parse(responseText);
+          throw new Error(error.error || error.message || `API Error: ${response.status}`);
+        } catch (e) {
+          if (e.message && e.message.includes('API Error')) throw e;
+          throw new Error(`API Error ${response.status}: ${responseText}`);
+        }
+      }
+      
+      closeAddRecordModal();
+      // Reload zone details
+      await viewZoneDetails(zoneId);
+      showError('Record added successfully!', 'success');
+    } catch (error) {
+      console.error('Error adding record:', error);
+      showError(error.message);
+    }
+  }
 
 <script>
   // Render icons when page loads

@@ -1,0 +1,9 @@
+{
+  "enabled": false,
+  "zones": [],
+  "subnets": {
+    "internal": ["192.168.0.0/16", "10.0.0.0/8", "172.16.0.0/12"],
+    "external": ["0.0.0.0/0"]
+  },
+  "description": "Split-Horizon DNS Configuration - Allows different responses based on client subnet"
+}

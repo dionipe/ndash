@@ -6,34 +6,34 @@
     <title><%= title %> - <%= appName %></title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap');
         * { font-family: 'Inter', sans-serif; }
-
+        
         /* Animated Background */
         @keyframes gradient {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
-
+        
         .animated-gradient {
-            background: linear-gradient(-45deg, #1e3a8a, #172554, #1e293b, #0f172a);
+            background: linear-gradient(-45deg, #e0f2fe, #dbeafe, #e0e7ff, #f0f9ff);
             background-size: 400% 400%;
             animation: gradient 15s ease infinite;
         }
-
+        
         /* Floating Animation */
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-20px); }
         }
-
+        
         .float-animation {
             animation: float 6s ease-in-out infinite;
         }
-
+        
         /* Fade In Up Animation */
         @keyframes fadeInUp {
             from {
@@ -45,21 +45,21 @@
                 transform: translateY(0);
             }
         }
-
+        
         .fade-in-up {
             animation: fadeInUp 0.8s ease-out forwards;
         }
-
+        
         .fade-in-up-delay-1 {
             opacity: 0;
             animation: fadeInUp 0.8s ease-out 0.2s forwards;
         }
-
+        
         .fade-in-up-delay-2 {
             opacity: 0;
             animation: fadeInUp 0.8s ease-out 0.4s forwards;
         }
-
+        
         /* Pulse Glow Animation */
         @keyframes pulseGlow {
             0%, 100% {
@@ -73,11 +73,11 @@
                            0 0 90px rgba(6, 182, 212, 0.2);
             }
         }
-
+        
         .pulse-glow {
             animation: pulseGlow 2s ease-in-out infinite;
         }
-
+        
         /* Wave Animation */
         @keyframes wave {
             0% {
@@ -89,19 +89,19 @@
                 opacity: 0;
             }
         }
-
+        
         .wave {
             animation: wave 2s ease-out infinite;
         }
-
+        
         .wave-delay-1 {
             animation-delay: 0.5s;
         }
-
+        
         .wave-delay-2 {
             animation-delay: 1s;
         }
-
+        
         /* Button Shine Effect */
         @keyframes shine {
             0% {
@@ -111,12 +111,12 @@
                 left: 100%;
             }
         }
-
+        
         .button-shine {
             position: relative;
             overflow: hidden;
         }
-
+        
         .button-shine::before {
             content: '';
             position: absolute;
@@ -127,7 +127,7 @@
             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
             animation: shine 3s infinite;
         }
-
+        
         /* Floating Particles */
         @keyframes particle {
             0% {
@@ -142,7 +142,7 @@
                 opacity: 0;
             }
         }
-
+        
         .particle {
             position: absolute;
             width: 6px;
@@ -151,7 +151,7 @@
             border-radius: 50%;
             pointer-events: none;
         }
-
+        
         .particle:nth-child(1) { left: 5%; animation: particle 12s infinite; animation-delay: 0s; }
         .particle:nth-child(2) { left: 15%; animation: particle 14s infinite; animation-delay: 2s; }
         .particle:nth-child(3) { left: 25%; animation: particle 11s infinite; animation-delay: 4s; }
@@ -161,11 +161,11 @@
         .particle:nth-child(7) { left: 65%; animation: particle 14s infinite; animation-delay: 2s; }
         .particle:nth-child(8) { left: 75%; animation: particle 11s infinite; animation-delay: 4s; }
         .particle:nth-child(9) { left: 85%; animation: particle 13s infinite; animation-delay: 1s; }
-
+        
         /* Responsive adjustments */
         @media (max-width: 1024px) {
             .animated-gradient {
-                background: linear-gradient(-45deg, #1e3a8a, #172554, #1e293b, #0f172a);
+                background: linear-gradient(-45deg, #e0f2fe, #dbeafe, #e0e7ff, #f0f9ff);
             }
         }
     </style>
@@ -173,7 +173,7 @@
 <body class="h-full animated-gradient relative overflow-hidden">
     <div class="min-h-screen flex">
         <!-- Left Side - Branding & Animation -->
-        <div class="hidden lg:flex lg:w-1/2 xl:w-3/5 bg-gradient-to-b from-blue-800 to-blue-900 relative overflow-hidden">
+        <div class="hidden lg:flex lg:w-1/2 xl:w-3/5 bg-gradient-to-br from-cyan-500 via-blue-600 to-blue-700 relative overflow-hidden">
             <!-- Floating Particles (Left Side Only) -->
             <div class="particle"></div>
             <div class="particle"></div>
@@ -184,14 +184,14 @@
             <div class="particle"></div>
             <div class="particle"></div>
             <div class="particle"></div>
-
+            
             <!-- Geometric Background Pattern -->
             <div class="absolute inset-0 opacity-10">
                 <div class="absolute top-0 left-0 w-64 h-64 bg-white rounded-full -translate-x-1/2 -translate-y-1/2"></div>
                 <div class="absolute top-1/4 right-0 w-96 h-96 bg-white rounded-full translate-x-1/3"></div>
                 <div class="absolute bottom-0 left-1/4 w-80 h-80 bg-white rounded-full translate-y-1/3"></div>
             </div>
-
+            
             <!-- Content -->
             <div class="relative z-10 flex flex-col justify-center px-12 xl:px-20 w-full">
                 <!-- Animated Logo -->
@@ -203,10 +203,10 @@
                             <div class="absolute w-full h-full border-2 border-white/30 rounded-full wave wave-delay-1"></div>
                             <div class="absolute w-full h-full border-2 border-white/30 rounded-full wave wave-delay-2"></div>
                         </div>
-
+                        
                         <!-- Glow Effect -->
                         <div class="absolute inset-0 bg-white rounded-full blur-3xl opacity-30"></div>
-
+                        
                         <!-- Logo Container -->
                         <div class="relative bg-white/20 backdrop-blur-lg rounded-full p-10 shadow-2xl pulse-glow transform hover:scale-110 transition-transform duration-500 cursor-pointer border-2 border-white/30">
                             <!-- Radio Waves Inside -->
@@ -214,73 +214,73 @@
                                 <div class="absolute inset-0 border-2 border-white/20 rounded-full animate-ping" style="animation-duration: 2s;"></div>
                                 <div class="absolute inset-4 border-2 border-white/15 rounded-full animate-ping" style="animation-duration: 2.5s; animation-delay: 0.5s;"></div>
                             </div>
-
+                            
                             <!-- Tower Icon -->
                             <div class="relative">
-                                <i data-lucide="globe" class="h-24 w-24 text-white drop-shadow-2xl"></i>
+                                <i data-lucide="radio" class="h-24 w-24 text-white drop-shadow-2xl"></i>
                             </div>
                         </div>
                     </div>
                 </div>
-
+                
                 <!-- Title & Description -->
                 <div class="mt-12 text-white fade-in-up-delay-1">
                     <h1 class="text-6xl font-bold mb-2 drop-shadow-lg">
-                        NDash
+                        Usman-D
                     </h1>
                     <h2 class="text-3xl font-bold mb-4 bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent drop-shadow-lg">
-                        PowerDNS Manager
+                        ISP Edition
                     </h2>
                     <h3 class="text-2xl font-semibold mb-2 text-cyan-100">
-                        (PowerDNS Administration Dashboard)
+                        (Radius Management Panel ISP Edition)
                     </h3>
                     <div class="w-24 h-1 bg-white/50 rounded-full mb-6"></div>
                     <p class="text-xl text-blue-100 leading-relaxed max-w-lg">
-                        Modern PowerDNS administration dashboard built with Express.js, EJS, Alpine.js, and Shadcn UI components.
+                        Comprehensive ISP Management System for PPPoE, VPN users, billing & accounting with MikroTik integration.
                     </p>
                     <p class="text-lg text-cyan-200 leading-relaxed max-w-lg mt-3">
-                        Now with <span class="font-bold text-yellow-300">Real-time Monitoring</span>, <span class="font-bold text-yellow-300">Zone Management</span> & <span class="font-bold text-yellow-300">Advanced Statistics</span>! 🚀
+                        Now with <span class="font-bold text-yellow-300">Billing & Revenue Management</span>, <span class="font-bold text-yellow-300">TR-069/CWMP</span> & <span class="font-bold text-yellow-300">Real-time Monitoring</span>! 🚀
                     </p>
-
+                    
                     <!-- Features -->
                     <div class="mt-10 space-y-4">
                         <div class="flex items-center space-x-3 text-blue-50">
                             <div class="bg-white/20 backdrop-blur-sm rounded-lg p-2">
-                                <i data-lucide="globe" class="h-5 w-5"></i>
+                                <i data-lucide="shield-check" class="h-5 w-5"></i>
                             </div>
-                            <span class="text-lg">PowerDNS API Integration</span>
+                            <span class="text-lg">Secure RADIUS Authentication</span>
                         </div>
                         <div class="flex items-center space-x-3 text-blue-50">
                             <div class="bg-white/20 backdrop-blur-sm rounded-lg p-2">
-                                <i data-lucide="database" class="h-5 w-5"></i>
+                                <i data-lucide="users" class="h-5 w-5"></i>
                             </div>
-                            <span class="text-lg">Zone & Record Management</span>
+                            <span class="text-lg">PPPoE & VPN User Management</span>
                         </div>
                         <div class="flex items-center space-x-3 text-blue-50">
                             <div class="bg-white/20 backdrop-blur-sm rounded-lg p-2">
                                 <i data-lucide="activity" class="h-5 w-5"></i>
                             </div>
-                            <span class="text-lg">Real-time Statistics & Analytics</span>
+                            <span class="text-lg">Real-time Monitoring & Analytics</span>
                         </div>
                         <div class="flex items-center space-x-3 text-blue-50">
                             <div class="bg-white/20 backdrop-blur-sm rounded-lg p-2">
-                                <i data-lucide="zap" class="h-5 w-5"></i>
+                                <i data-lucide="server" class="h-5 w-5"></i>
                             </div>
-                            <span class="text-lg">Modern UI with Alpine.js</span>
+                            <span class="text-lg">MikroTik Integration</span>
                         </div>
-                        <!-- NEW: Error Handling Feature -->
+                        <!-- NEW: TR-069 Feature -->
                         <div class="flex items-center space-x-3 text-blue-50 relative">
                             <div class="bg-white/20 backdrop-blur-sm rounded-lg p-2">
-                                <i data-lucide="shield-alert" class="h-5 w-5"></i>
+                                <i data-lucide="radio" class="h-5 w-5"></i>
                             </div>
-                            <span class="text-lg">Advanced Error Handling</span>
+                            <span class="text-lg">TR-069/CWMP CPE Management</span>
                             <span class="absolute -right-2 -top-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg animate-pulse">
                                 NEW
                             </span>
                         </div>
                     </div>
                 </div>
-
+                
                 <!-- Footer Info -->
                 <div class="mt-auto pt-12 fade-in-up-delay-2">
                     <!-- NEW Feature Banner -->
@@ -290,52 +290,52 @@
                                 <i data-lucide="sparkles" class="h-5 w-5 text-white"></i>
                             </div>
                             <div>
-                                <p class="text-white font-semibold text-sm">🎉 New Feature: Advanced Error Handling</p>
-                                <p class="text-blue-100 text-xs mt-1">User-friendly error banners with automatic retry functionality</p>
+                                <p class="text-white font-semibold text-sm">🎉 New Feature: TR-069 CPE Management</p>
+                                <p class="text-blue-100 text-xs mt-1">Remote management for routers, ONTs & modems via CWMP protocol</p>
                             </div>
                         </div>
                     </div>
-
+                    
                     <div class="text-white/70 text-sm">
                         <p class="flex items-center space-x-2">
-                            <span>&copy; 2025 NDash PowerDNS Dashboard</span>
+                            <span>&copy; 2025 RADIUS Management Panel</span>
                         </p>
                         <p class="mt-2 flex items-center space-x-2">
                             <span>Powered by</span>
                             <i data-lucide="zap" class="h-4 w-4 text-yellow-300"></i>
-                            <span class="font-semibold text-white">PowerDNS, Express.js & Alpine.js</span>
+                            <span class="font-semibold text-white">MikroTik, FreeRADIUS & GenieACS</span>
                         </p>
                     </div>
                 </div>
             </div>
         </div>
-
+        
         <!-- Right Side - Login Form -->
-        <div class="w-full lg:w-1/2 xl:w-2/5 flex items-center justify-center p-8 bg-slate-800 relative">
+        <div class="w-full lg:w-1/2 xl:w-2/5 flex items-center justify-center p-8 bg-gray-50 animated-gradient relative">
             <div class="max-w-md w-full space-y-8 relative z-10">
             <!-- Mobile Logo (Only visible on mobile) -->
             <div class="text-center mb-8 lg:hidden fade-in-up">
                 <div class="mx-auto relative" style="width: 80px; height: 80px;">
                     <div class="absolute inset-0 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-full blur-xl opacity-40"></div>
                     <div class="relative bg-gradient-to-br from-cyan-400 via-blue-500 to-blue-600 rounded-full p-4 shadow-xl">
-                        <i data-lucide="globe" class="h-12 w-12 text-white drop-shadow-lg"></i>
+                        <i data-lucide="radio" class="h-12 w-12 text-white drop-shadow-lg"></i>
                     </div>
                 </div>
-                <h2 class="mt-4 text-2xl font-bold text-white">
-                    NDash
+                <h2 class="mt-4 text-2xl font-bold text-gray-900">
+                    Usman-D
                 </h2>
                 <p class="text-sm font-semibold bg-gradient-to-r from-yellow-600 to-orange-600 bg-clip-text text-transparent">
-                    PowerDNS Manager
+                    ISP Edition
                 </p>
-                <p class="text-xs text-gray-300 mt-1">PowerDNS Administration Dashboard</p>
+                <p class="text-xs text-gray-600 mt-1">Radius Management Panel ISP Edition</p>
             </div>
-
+            
             <!-- Form Header -->
             <div class="text-center fade-in-up">
-                <h2 class="text-3xl font-bold text-white">
+                <h2 class="text-3xl font-bold text-gray-900">
                     Welcome Back
                 </h2>
-                <p class="mt-2 text-sm text-gray-300">
+                <p class="mt-2 text-sm text-gray-600">
                     Sign in to access your dashboard
                 </p>
                 <div class="mt-4 flex items-center justify-center space-x-2">
@@ -355,11 +355,11 @@
                 </div>
             <% } %>
 
-            <form class="mt-8 space-y-6 bg-slate-700 p-8 rounded-2xl shadow-xl border border-slate-600 fade-in-up-delay-2" action="/login" method="POST">
+            <form class="mt-8 space-y-6 bg-white p-8 rounded-2xl shadow-xl border border-gray-100 fade-in-up-delay-2" action="/auth/login" method="POST">
                 <div class="space-y-5">
                     <!-- Username Field -->
                     <div class="group">
-                        <label for="username" class="block text-sm font-semibold text-gray-200 mb-2 flex items-center">
+                        <label for="username" class="block text-sm font-semibold text-gray-700 mb-2 flex items-center">
                             <i data-lucide="user" class="h-4 w-4 mr-2 text-cyan-500"></i>
                             Username
                         </label>
@@ -368,7 +368,7 @@
                                 <i data-lucide="user-circle" class="h-5 w-5 text-gray-400 group-focus-within:text-cyan-500 transition-colors"></i>
                             </div>
                             <input id="username" name="username" type="text" required
-                                   class="pl-12 appearance-none block w-full px-4 py-3.5 border-2 border-gray-600 rounded-xl placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all duration-300 hover:border-gray-500 bg-slate-700"
+                                   class="pl-12 appearance-none block w-full px-4 py-3.5 border-2 border-gray-200 rounded-xl placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all duration-300 hover:border-gray-300"
                                    placeholder="Enter your username"
                                    autocomplete="username">
                         </div>
@@ -376,7 +376,7 @@
 
                     <!-- Password Field -->
                     <div class="group">
-                        <label for="password" class="block text-sm font-semibold text-gray-200 mb-2 flex items-center">
+                        <label for="password" class="block text-sm font-semibold text-gray-700 mb-2 flex items-center">
                             <i data-lucide="lock" class="h-4 w-4 mr-2 text-blue-500"></i>
                             Password
                         </label>
@@ -385,7 +385,7 @@
                                 <i data-lucide="key-round" class="h-5 w-5 text-gray-400 group-focus-within:text-blue-500 transition-colors"></i>
                             </div>
                             <input id="password" name="password" type="password" required
-                                   class="pl-12 appearance-none block w-full px-4 py-3.5 border-2 border-gray-600 rounded-xl placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 hover:border-gray-500 bg-slate-700"
+                                   class="pl-12 appearance-none block w-full px-4 py-3.5 border-2 border-gray-200 rounded-xl placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 hover:border-gray-300"
                                    placeholder="Enter your password"
                                    autocomplete="current-password">
                         </div>
@@ -405,54 +405,54 @@
                 <!-- Footer Info -->
                 <div class="relative">
                     <div class="absolute inset-0 flex items-center">
-                        <div class="w-full border-t border-slate-600"></div>
+                        <div class="w-full border-t border-gray-200"></div>
                     </div>
                     <div class="relative flex justify-center text-sm">
-                        <span class="px-4 bg-slate-700 text-gray-300 font-medium">Quick Access</span>
+                        <span class="px-4 bg-white/80 text-gray-500 font-medium">Quick Access</span>
                     </div>
                 </div>
-
+                
                 <div class="text-center space-y-3">
-                    <div class="bg-gradient-to-r from-slate-600 to-slate-500 border border-slate-500 rounded-lg p-4">
-                        <p class="text-sm font-semibold text-white mb-2 flex items-center justify-center">
-                            <i data-lucide="info" class="h-4 w-4 mr-2 text-blue-400"></i>
+                    <div class="bg-gradient-to-r from-blue-50 to-cyan-50 border border-blue-100 rounded-lg p-4">
+                        <p class="text-sm font-semibold text-gray-700 mb-2 flex items-center justify-center">
+                            <i data-lucide="info" class="h-4 w-4 mr-2 text-blue-500"></i>
                             Default Credentials
                         </p>
                         <div class="flex items-center justify-center space-x-2 text-sm">
-                            <code class="bg-slate-800 px-3 py-1.5 rounded-md font-mono text-cyan-300 border border-slate-600 shadow-sm">admin</code>
-                            <span class="text-gray-300">/</span>
-                            <code class="bg-slate-800 px-3 py-1.5 rounded-md font-mono text-blue-300 border border-slate-600 shadow-sm">admin123</code>
+                            <code class="bg-white px-3 py-1.5 rounded-md font-mono text-cyan-600 border border-cyan-200 shadow-sm">admin</code>
+                            <span class="text-gray-400">/</span>
+                            <code class="bg-white px-3 py-1.5 rounded-md font-mono text-blue-600 border border-blue-200 shadow-sm">admin123</code>
                         </div>
                     </div>
-
-                    <p class="text-xs text-gray-400 flex items-center justify-center space-x-2">
+                    
+                    <p class="text-xs text-gray-500 flex items-center justify-center space-x-2">
                         <i data-lucide="shield-alert" class="h-3 w-3"></i>
                         <span>Secure connection established</span>
                         <span class="inline-block w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
                     </p>
                 </div>
             </form>
-
+            
             <!-- Bottom Info -->
             <div class="text-center space-y-3 fade-in-up-delay-2">
-                <div class="flex items-center justify-center space-x-6 text-sm text-gray-300">
-                    <div onclick="showModal('helpModal')" class="flex items-center space-x-2 hover:text-cyan-400 transition-colors cursor-pointer">
+                <div class="flex items-center justify-center space-x-6 text-sm text-gray-600">
+                    <div onclick="showModal('helpModal')" class="flex items-center space-x-2 hover:text-cyan-600 transition-colors cursor-pointer">
                         <i data-lucide="help-circle" class="h-4 w-4"></i>
                         <span>Help</span>
                     </div>
-                    <div onclick="showModal('docsModal')" class="flex items-center space-x-2 hover:text-cyan-400 transition-colors cursor-pointer">
+                    <div onclick="showModal('docsModal')" class="flex items-center space-x-2 hover:text-cyan-600 transition-colors cursor-pointer">
                         <i data-lucide="book-open" class="h-4 w-4"></i>
                         <span>Docs</span>
                     </div>
-                    <div onclick="showModal('supportModal')" class="flex items-center space-x-2 hover:text-cyan-400 transition-colors cursor-pointer">
+                    <div onclick="showModal('supportModal')" class="flex items-center space-x-2 hover:text-cyan-600 transition-colors cursor-pointer">
                         <i data-lucide="mail" class="h-4 w-4"></i>
                         <span>Support</span>
                     </div>
                 </div>
 
-
-                <div class="text-xs text-gray-400 lg:hidden">
-                    <p>&copy; 2025 NDash PowerDNS Dashboard. All rights reserved.</p>
+                
+                <div class="text-xs text-gray-500 lg:hidden">
+                    <p>&copy; 2025 RADIUS Panel. All rights reserved.</p>
                 </div>
             </div>
             </div>
@@ -461,18 +461,18 @@
 
     <!-- Help Modal -->
     <div id="helpModal" style="display: none;" class="fixed inset-0 bg-black bg-opacity-50 z-[9999] flex items-center justify-center overflow-y-auto">
-        <div class="bg-slate-700 rounded-lg p-8 max-w-md w-full mx-4 my-auto shadow-2xl">
+        <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4 my-auto shadow-2xl">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="text-xl font-bold">Help & FAQ</h3>
                 <button onclick="hideModal('helpModal')" class="text-gray-500 hover:text-gray-700">
                     <i data-lucide="x" class="h-6 w-6"></i>
                 </button>
             </div>
-            <div class="mb-4 text-white space-y-2">
+            <div class="mb-4 text-gray-700 space-y-2">
                 <p><strong>Default Credentials:</strong></p>
-                <p>Username: <code class="bg-slate-800 px-2 py-1 rounded text-cyan-300">admin</code></p>
-                <p>Password: <code class="bg-slate-800 px-2 py-1 rounded text-blue-300">admin123</code></p>
-                <p class="text-xs text-red-400 mt-2">⚠️ Change password after first login!</p>
+                <p>Username: <code class="bg-gray-100 px-2 py-1 rounded">admin</code></p>
+                <p>Password: <code class="bg-gray-100 px-2 py-1 rounded">admin123</code></p>
+                <p class="text-xs text-red-600 mt-2">⚠️ Change password after first login!</p>
             </div>
             <button onclick="hideModal('helpModal')" class="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Close</button>
         </div>
@@ -480,9 +480,9 @@
 
     <!-- Docs Modal -->
     <div id="docsModal" style="display: none;" class="fixed inset-0 bg-black bg-opacity-50 z-[9999] flex items-center justify-center overflow-y-auto">
-        <div class="bg-slate-700 rounded-lg p-8 max-w-4xl w-full mx-4 my-auto shadow-2xl max-h-[90vh] overflow-y-auto">
+        <div class="bg-white rounded-lg p-8 max-w-4xl w-full mx-4 my-auto shadow-2xl max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-6">
-                <h3 class="text-2xl font-bold text-white">📚 Documentation</h3>
+                <h3 class="text-2xl font-bold text-gray-900">📚 Documentation</h3>
                 <button onclick="hideModal('docsModal')" class="text-gray-500 hover:text-gray-700">
                     <i data-lucide="x" class="h-6 w-6"></i>
                 </button>
@@ -496,16 +496,16 @@
                             <code class="text-xs text-blue-600">/docs/INSTALLATION.md</code>
                         </div>
                         <div class="bg-white rounded p-3">
-                            <p class="font-medium text-gray-900 text-sm">� PowerDNS API</p>
-                            <code class="text-xs text-blue-600">/docs/POWERDNS_API.md</code>
+                            <p class="font-medium text-gray-900 text-sm">👥 User Management</p>
+                            <code class="text-xs text-blue-600">/docs/WEB_MANAGEMENT_GUIDE.md</code>
                         </div>
                         <div class="bg-white rounded p-3">
-                            <p class="font-medium text-gray-900 text-sm">🌐 Zone Management</p>
-                            <code class="text-xs text-blue-600">/docs/ZONE_MANAGEMENT.md</code>
+                            <p class="font-medium text-gray-900 text-sm">🛡️ Admin Management</p>
+                            <code class="text-xs text-blue-600">/docs/ADMIN_MANAGEMENT.md</code>
                         </div>
                         <div class="bg-white rounded p-3">
-                            <p class="font-medium text-gray-900 text-sm">� Statistics</p>
-                            <code class="text-xs text-blue-600">/docs/STATISTICS.md</code>
+                            <p class="font-medium text-gray-900 text-sm">🔧 MikroTik Integration</p>
+                            <code class="text-xs text-blue-600">/docs/MIKROTIK_INTEGRATION.md</code>
                         </div>
                     </div>
                 </div>
@@ -533,15 +533,15 @@
                     <h4 class="font-semibold text-gray-900 mb-3">Technical Support</h4>
                     <div class="space-y-2 text-sm">
                         <p>🖥️ <strong>System Administrator:</strong> Contact IT for access issues</p>
-                        <p>🔌 <strong>PowerDNS API:</strong> Server: localhost:8081, API Key required</p>
-                        <p>🗄️ <strong>Database:</strong> PowerDNS MySQL/MariaDB backend</p>
+                        <p>🔌 <strong>SSH Access:</strong> Server: your-server-ip, Port: 22</p>
+                        <p>🗄️ <strong>Database:</strong> MySQL/MariaDB localhost:3306</p>
                     </div>
                 </div>
                 <div class="bg-blue-50 rounded-lg p-4">
                     <h4 class="font-semibold text-gray-900 mb-2">🐛 Troubleshooting</h4>
                     <p class="text-sm mb-2">Check logs:</p>
-                    <code class="bg-gray-800 text-green-400 text-xs block p-2 rounded mb-1">tail -f /var/log/pdns/pdns.log</code>
-                    <code class="bg-gray-800 text-green-400 text-xs block p-2 rounded">tail -f /tmp/ndash-web.log</code>
+                    <code class="bg-gray-800 text-green-400 text-xs block p-2 rounded mb-1">tail -f /tmp/radius-web.log</code>
+                    <code class="bg-gray-800 text-green-400 text-xs block p-2 rounded">tail -f /var/log/freeradius/radius.log</code>
                 </div>
             </div>
             <div class="mt-6 flex justify-end">
@@ -553,7 +553,7 @@
     <script>
         // Initialize Lucide icons
         lucide.createIcons();
-
+        
         // Modal functions
         function showModal(modalId) {
             const modal = document.getElementById(modalId);
@@ -562,14 +562,14 @@
                 setTimeout(() => lucide.createIcons(), 100);
             }
         }
-
+        
         function hideModal(modalId) {
             const modal = document.getElementById(modalId);
             if (modal) {
                 modal.style.display = 'none';
             }
         }
-
+        
         // Close modal on backdrop click
         document.addEventListener('click', function(e) {
             // Handle backdrop click - check if click target is the modal overlay itself
@@ -577,7 +577,7 @@
                 e.target.style.display = 'none';
             }
         });
-
+        
         // Close modal on ESC key
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
@@ -590,7 +590,21 @@
                 });
             }
         });
-
+        
+        // Close modal on ESC key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                // Close any visible modal
+                const modals = ['helpModal', 'docsModal', 'supportModal'];
+                modals.forEach(modalId => {
+                    const modal = document.getElementById(modalId);
+                    if (modal && modal.style.display !== 'none') {
+                        modal.style.display = 'none';
+                    }
+                });
+            }
+        });
+        
         // Auto-hide flash messages
         setTimeout(() => {
             const alerts = document.querySelectorAll('[data-auto-hide]');
@@ -601,7 +615,7 @@
                 setTimeout(() => alert.remove(), 500);
             });
         }, 5000);
-
+        
         // Add floating animation on logo hover
         const logo = document.querySelector('.float-animation');
         if (logo) {
@@ -612,17 +626,12 @@
                 this.style.animationPlayState = 'running';
             });
         }
-
+        
         // Form submit animation
         const form = document.querySelector('form');
         const submitBtn = form.querySelector('button[type="submit"]');
-
+        
         form.addEventListener('submit', function(e) {
-            e.preventDefault(); // Prevent default form submission
-            
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            
             submitBtn.disabled = true;
             submitBtn.innerHTML = `
                 <svg class="animate-spin h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -631,71 +640,8 @@
                 </svg>
                 <span>Authenticating...</span>
             `;
-
-            // Send login request
-            fetch('/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ username, password })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Redirect to dashboard on success
-                    window.location.href = '/';
-                } else {
-                    // Show error message
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = 'Sign In';
-                    
-                    // Show error message
-                    const errorDiv = document.createElement('div');
-                    errorDiv.className = 'mt-4 p-3 bg-red-500 text-white rounded-lg text-center';
-                    errorDiv.textContent = data.message || 'Login failed';
-                    
-                    // Remove any existing error messages
-                    const existingError = form.querySelector('.bg-red-500');
-                    if (existingError) {
-                        existingError.remove();
-                    }
-                    
-                    form.appendChild(errorDiv);
-                    
-                    // Remove error after 5 seconds
-                    setTimeout(() => {
-                        if (errorDiv.parentNode) {
-                            errorDiv.remove();
-                        }
-                    }, 5000);
-                }
-            })
-            .catch(error => {
-                console.error('Login error:', error);
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = 'Sign In';
-                
-                // Show generic error
-                const errorDiv = document.createElement('div');
-                errorDiv.className = 'mt-4 p-3 bg-red-500 text-white rounded-lg text-center';
-                errorDiv.textContent = 'Network error. Please try again.';
-                
-                const existingError = form.querySelector('.bg-red-500');
-                if (existingError) {
-                    existingError.remove();
-                }
-                
-                form.appendChild(errorDiv);
-                
-                setTimeout(() => {
-                    if (errorDiv.parentNode) {
-                        errorDiv.remove();
-                    }
-                }, 5000);
-            });
         });
-
+        
         // Add keyboard shortcut (Ctrl+L to focus username)
         document.addEventListener('keydown', function(e) {
             if (e.ctrlKey && e.key === 'l') {
@@ -703,7 +649,7 @@
                 document.getElementById('username').focus();
             }
         });
-
+        
         // Input field animations
         const inputs = document.querySelectorAll('input[type="text"], input[type="password"]');
         inputs.forEach(input => {
@@ -711,7 +657,7 @@
                 this.parentElement.classList.add('scale-[1.02]');
                 this.parentElement.style.transition = 'transform 0.2s';
             });
-
+            
             input.addEventListener('blur', function() {
                 this.parentElement.classList.remove('scale-[1.02]');
             });
