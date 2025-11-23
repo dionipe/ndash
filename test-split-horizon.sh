@@ -3,6 +3,28 @@
 # NDash Split-Horizon DNS Test Script
 # Tests the Split-Horizon DNS proxy functionality
 
+# Function to display usage
+usage() {
+    echo "Usage: $0 [DOMAIN]"
+    echo ""
+    echo "Arguments:"
+    echo "  DOMAIN    Domain name to test (default: dionipe.id)"
+    echo ""
+    echo "Examples:"
+    echo "  $0                    # Test default domain (dionipe.id)"
+    echo "  $0 example.com        # Test example.com"
+    echo "  $0 test.dionipe.id    # Test subdomain"
+    exit 1
+}
+
+# Parse command line arguments
+if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+    usage
+fi
+
+# Set test domain from argument or default
+TEST_DOMAIN="${1:-dionipe.id}"
+
 echo "🌐 NDash Split-Horizon DNS Test"
 echo "================================"
 
@@ -18,7 +40,6 @@ PROXY_HOST="127.0.0.1"
 PROXY_PORT="5353"
 UPSTREAM_HOST="127.0.0.1"
 UPSTREAM_PORT="53"
-TEST_DOMAIN="dionipe.id"
 
 echo -e "${BLUE}Configuration:${NC}"
 echo "  Proxy Server: $PROXY_HOST:$PROXY_PORT (Split-Horizon)"
@@ -31,7 +52,7 @@ extract_ip() {
     grep -A1 "ANSWER SECTION" | tail -1 | awk '{print $5}'
 }
 
-echo -e "${YELLOW}Testing Split-Horizon DNS functionality...${NC}"
+echo -e "${YELLOW}Testing Split-Horizon DNS functionality for domain: $TEST_DOMAIN${NC}"
 echo ""
 
 # Test 1: External client (via proxy)
@@ -80,4 +101,5 @@ echo "3. Test with tools like 'dig' from different network segments"
 
 echo ""
 echo -e "${BLUE}Current Split-Horizon configuration:${NC}"
-curl -s http://localhost:3000/api/split-horizon/config | jq '.zones[0]' 2>/dev/null || echo "Could not fetch config (NDash not running?)"
+curl -s http://localhost:3000/api/split-horizon/config | jq '.zones[0]' 2>/dev/null || echo "Could not fetch config (NDash not running?)"dionipe
+
