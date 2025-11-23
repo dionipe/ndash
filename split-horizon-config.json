@@ -2,30 +2,20 @@
   "enabled": true,
   "zones": [
     {
-      "name": "dionipe.local",
+      "name": "dionipe.id",
       "internal": [
         {
-          "name": "@",
-          "type": "A",
-          "value": "192.168.203.5"
-        },
-        {
-          "name": "www",
+          "name": "",
           "type": "A",
           "value": "192.168.203.5"
         }
       ],
-      "external": [
-        {
-          "name": "@",
-          "type": "A",
-          "value": "8.8.8.8"
-        }
-      ]
+      "external": []
     }
   ],
   "subnets": {
     "internal": [
+      "127.0.0.1/32",
       "192.168.0.0/16",
       "10.0.0.0/8",
       "172.16.0.0/12"

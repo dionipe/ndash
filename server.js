@@ -130,7 +130,8 @@ class SplitHorizonDNSProxy {
         
         // Find matching record
         for (const record of records) {
-          const recordName = record.name === '@' ? zoneName : 
+          const recordName = record.name === '' ? zoneName : 
+                           record.name === '@' ? zoneName :
                            record.name.includes('.') ? record.name : 
                            `${record.name}.${zoneName}`;
           
@@ -301,6 +302,14 @@ app.get('/settings', requireAuth, (req, res) => {
   res.render('settings', {
     title: 'Settings - NDash',
     page: 'settings',
+    username: req.session.username
+  });
+});
+
+app.get('/split-horizon', requireAuth, (req, res) => {
+  res.render('split-horizon', {
+    title: 'Split-Horizon DNS - NDash',
+    page: 'split-horizon',
     username: req.session.username
   });
 });

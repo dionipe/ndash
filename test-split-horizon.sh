@@ -18,7 +18,7 @@ PROXY_HOST="127.0.0.1"
 PROXY_PORT="5353"
 UPSTREAM_HOST="127.0.0.1"
 UPSTREAM_PORT="53"
-TEST_DOMAIN="dionipe.local"
+TEST_DOMAIN="dionipe.id"
 
 echo -e "${BLUE}Configuration:${NC}"
 echo "  Proxy Server: $PROXY_HOST:$PROXY_PORT (Split-Horizon)"

@@ -442,178 +442,6 @@
       color: #2d3748;
     }
 
-    /* Split-Horizon Styles */
-    .split-horizon-zones {
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      overflow: hidden;
-    }
-
-    .split-horizon-zone {
-      border-bottom: 1px solid #f1f5f9;
-      padding: 20px;
-      background: white;
-    }
-
-    .split-horizon-zone:last-child {
-      border-bottom: none;
-    }
-
-    .zone-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-    }
-
-    .zone-name {
-      font-weight: 600;
-      color: #2d3748;
-      font-size: 16px;
-    }
-
-    .zone-remove {
-      background: #fed7d7;
-      color: #c53030;
-      border: none;
-      border-radius: 4px;
-      padding: 6px 12px;
-      cursor: pointer;
-      font-size: 12px;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .zone-remove:hover {
-      background: #fc8181;
-    }
-
-    .zone-records {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-
-    .zone-record-group {
-      background: #f8fafc;
-      padding: 12px;
-      border-radius: 6px;
-      border-left: 3px solid #667eea;
-    }
-
-    .record-group-label {
-      font-weight: 600;
-      color: #4a5568;
-      margin-bottom: 8px;
-      font-size: 13px;
-    }
-
-    .record-input-group {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 8px;
-    }
-
-    .record-input-group:last-child {
-      margin-bottom: 0;
-    }
-
-    .record-name {
-      flex: 2;
-      padding: 6px 8px;
-      border: 1px solid #e2e8f0;
-      border-radius: 4px;
-      font-size: 13px;
-    }
-
-    .record-type {
-      flex: 1;
-      padding: 6px 8px;
-      border: 1px solid #e2e8f0;
-      border-radius: 4px;
-      font-size: 13px;
-    }
-
-    .record-value {
-      flex: 3;
-      padding: 6px 8px;
-      border: 1px solid #e2e8f0;
-      border-radius: 4px;
-      font-size: 13px;
-    }
-
-    .record-remove {
-      background: #e2e8f0;
-      color: #4a5568;
-      border: none;
-      border-radius: 4px;
-      padding: 6px;
-      cursor: pointer;
-      font-size: 12px;
-    }
-
-    .record-remove:hover {
-      background: #cbd5e0;
-    }
-
-    .add-record-btn {
-      background: #e0e7ff;
-      color: #5a67d8;
-      border: none;
-      border-radius: 4px;
-      padding: 8px 12px;
-      cursor: pointer;
-      font-size: 12px;
-      margin-top: 8px;
-    }
-
-    .add-record-btn:hover {
-      background: #c7d2fe;
-    }
-
-    .split-horizon-examples {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 16px;
-      margin-top: 12px;
-    }
-
-    .example-item {
-      background: #f8fafc;
-      padding: 16px;
-      border-radius: 8px;
-      border-left: 4px solid #38a169;
-    }
-
-    .example-item h4 {
-      margin: 0 0 8px 0;
-      font-size: 14px;
-      font-weight: 600;
-      color: #2d3748;
-    }
-
-    .example-item p {
-      margin: 0 0 8px 0;
-      font-size: 13px;
-      color: #4a5568;
-      line-height: 1.4;
-    }
-
-    .example-item small {
-      font-size: 12px;
-      color: #718096;
-      font-style: italic;
-    }
-
-    .example-item code {
-      background: #e2e8f0;
-      padding: 2px 4px;
-      border-radius: 3px;
-      font-size: 11px;
-      color: #2d3748;
-    }
-
     [data-lucide] {
       display: inline-block;
     }
@@ -770,88 +598,6 @@
           </div>
         </div>
 
-        <!-- Split-Horizon DNS Configuration Section -->
-        <div class="settings-section">
-          <h2 class="section-title">Split-Horizon DNS</h2>
-          
-          <div class="info-box">
-            <svg data-lucide="git-branch"></svg>
-            Split-Horizon DNS allows different DNS responses based on client subnet. Configure internal vs external responses for enhanced security and performance.
-          </div>
-
-          <!-- Enable/Disable Split-Horizon -->
-          <div class="setting-group">
-            <label class="setting-label">
-              <input type="checkbox" id="split-horizon-enabled" style="width: auto; margin-right: 8px; cursor: pointer;">
-              Enable Split-Horizon DNS
-            </label>
-            <div class="setting-description">Enable different DNS responses based on client IP subnets</div>
-          </div>
-
-          <!-- Subnet Configuration -->
-          <div class="setting-group">
-            <label class="setting-label">Internal Subnets</label>
-            <div class="setting-description">IP subnets considered as internal network (comma-separated CIDR notation)</div>
-            <textarea id="internal-subnets" rows="3" placeholder="192.168.0.0/16, 10.0.0.0/8, 172.16.0.0/12">192.168.0.0/16, 10.0.0.0/8, 172.16.0.0/12</textarea>
-          </div>
-
-          <div class="setting-group">
-            <label class="setting-label">External Subnets</label>
-            <div class="setting-description">IP subnets considered as external network (default: 0.0.0.0/0)</div>
-            <textarea id="external-subnets" rows="2" placeholder="0.0.0.0/0">0.0.0.0/0</textarea>
-          </div>
-
-          <!-- Zone-specific Split-Horizon -->
-          <div class="setting-group">
-            <label class="setting-label">Zone Split-Horizon Configuration</label>
-            <div class="setting-description">Configure specific zones with Split-Horizon rules</div>
-            
-            <div class="split-horizon-zones" id="split-horizon-zones">
-              <!-- Zone configurations will be loaded here -->
-            </div>
-
-            <button class="btn btn-secondary" onclick="addSplitHorizonZone()" style="margin-top: 12px;">
-              <svg data-lucide="plus" style="width: 16px; height: 16px;"></svg>
-              Add Zone Configuration
-            </button>
-          </div>
-
-          <!-- Split-Horizon Examples -->
-          <div class="setting-group">
-            <label class="setting-label">Configuration Examples</label>
-            <div class="split-horizon-examples">
-              <div class="example-item">
-                <h4>Internal vs External A Records</h4>
-                <p>Internal clients get <code>192.168.1.10</code>, external clients get <code>203.0.113.10</code></p>
-                <small>Useful for web servers with internal and external IPs</small>
-              </div>
-              
-              <div class="example-item">
-                <h4>Internal Mail Server</h4>
-                <p>Internal clients use <code>mail.internal.company.com</code>, external use <code>mail.company.com</code></p>
-                <small>Route internal traffic through internal infrastructure</small>
-              </div>
-              
-              <div class="example-item">
-                <h4>VPN Access</h4>
-                <p>VPN clients get internal IPs, public clients get external IPs</p>
-                <small>Optimize routing for VPN vs internet traffic</small>
-              </div>
-            </div>
-          </div>
-
-          <div class="button-group">
-            <button class="btn btn-primary" onclick="saveSplitHorizonConfig()">
-              <svg data-lucide="save" style="width: 16px; height: 16px;"></svg>
-              Save Split-Horizon Config
-            </button>
-            <button class="btn btn-secondary" onclick="testSplitHorizonConfig()">
-              <svg data-lucide="play" style="width: 16px; height: 16px;"></svg>
-              Test Configuration
-            </button>
-          </div>
-        </div>
-
         <!-- Application Settings Section -->
         <div class="settings-section">
           <h2 class="section-title">Application Settings</h2>
@@ -979,7 +725,9 @@
 
     async function loadServerInfo() {
       try {
-        const response = await fetch('/api/servers');
+        const response = await fetch('/api/servers', {
+          credentials: 'same-origin'
+        });
         if (!response.ok) throw new Error('Failed to load server info');
 
         const servers = await response.json();
@@ -1104,7 +852,9 @@
     // Service Management Functions
     async function loadServices() {
       try {
-        const response = await fetch('/api/services');
+        const response = await fetch('/api/services', {
+          credentials: 'same-origin'
+        });
         const services = await response.json();
         
         const servicesList = document.getElementById('services-list');
@@ -1160,6 +910,7 @@
           headers: {
             'Content-Type': 'application/json',
           },
+          credentials: 'same-origin',
           body: JSON.stringify({
             name,
             type,
@@ -1190,7 +941,8 @@
 
       try {
         const response = await fetch(`/api/services/${serviceId}`, {
-          method: 'DELETE'
+          method: 'DELETE',
+          credentials: 'same-origin'
         });
 
         if (!response.ok) {
@@ -1206,7 +958,9 @@
 
     async function testService(serviceId) {
       try {
-        const response = await fetch(`/api/services/${serviceId}/test`);
+        const response = await fetch(`/api/services/${serviceId}/test`, {
+          credentials: 'same-origin'
+        });
         const result = await response.json();
         
         if (result.success) {
@@ -1275,253 +1029,6 @@
     document.getElementById('service-type').dispatchEvent(new Event('change'));
   </script>
 
-  <script>
-    // Split-Horizon Management Functions
-    let splitHorizonConfig = {
-      enabled: false,
-      zones: [],
-      subnets: {
-        internal: ['192.168.0.0/16', '10.0.0.0/8', '172.16.0.0/12'],
-        external: ['0.0.0.0/0']
-      }
-    };
-
-    // Load Split-Horizon configuration
-    async function loadSplitHorizonConfig() {
-      try {
-        const response = await fetch('/api/split-horizon/config');
-        const config = await response.json();
-        splitHorizonConfig = config;
-
-        // Update UI
-        document.getElementById('split-horizon-enabled').checked = config.enabled;
-        document.getElementById('internal-subnets').value = config.subnets.internal.join(', ');
-        document.getElementById('external-subnets').value = config.subnets.external.join(', ');
-
-        // Render zones
-        renderSplitHorizonZones();
-      } catch (error) {
-        console.error('Error loading split-horizon config:', error);
-        showError('Failed to load Split-Horizon configuration');
-      }
-    }
-
-    // Save Split-Horizon configuration
-    async function saveSplitHorizonConfig() {
-      try {
-        // Collect data from UI
-        splitHorizonConfig.enabled = document.getElementById('split-horizon-enabled').checked;
-        splitHorizonConfig.subnets.internal = document.getElementById('internal-subnets').value
-          .split(',')
-          .map(s => s.trim())
-          .filter(s => s);
-        splitHorizonConfig.subnets.external = document.getElementById('external-subnets').value
-          .split(',')
-          .map(s => s.trim())
-          .filter(s => s);
-
-        const response = await fetch('/api/split-horizon/config', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(splitHorizonConfig)
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to save configuration');
-        }
-
-        showSuccess('Split-Horizon configuration saved successfully');
-        
-        // Notify other pages that configuration has changed
-        localStorage.setItem('splitHorizonConfigChanged', Date.now().toString());
-        window.dispatchEvent(new CustomEvent('splitHorizonConfigChanged'));
-      } catch (error) {
-        showError('Failed to save Split-Horizon configuration: ' + error.message);
-      }
-    }
-
-    // Test Split-Horizon configuration
-    async function testSplitHorizonConfig() {
-      try {
-        // Basic validation
-        const internalSubnets = document.getElementById('internal-subnets').value
-          .split(',')
-          .map(s => s.trim())
-          .filter(s => s);
-
-        const externalSubnets = document.getElementById('external-subnets').value
-          .split(',')
-          .map(s => s.trim())
-          .filter(s => s);
-
-        // Validate CIDR notation
-        const cidrRegex = /^(\d{1,3}\.){3}\d{1,3}\/\d{1,2}$/;
-        const invalidSubnets = [...internalSubnets, ...externalSubnets].filter(subnet => !cidrRegex.test(subnet));
-
-        if (invalidSubnets.length > 0) {
-          showError('Invalid CIDR notation: ' + invalidSubnets.join(', '));
-          return;
-        }
-
-        // Test zone configurations
-        let hasErrors = false;
-        for (const zone of splitHorizonConfig.zones) {
-          if (!zone.name || !zone.internal.length || !zone.external.length) {
-            showError(`Zone "${zone.name}" is incomplete`);
-            hasErrors = true;
-          }
-        }
-
-        if (!hasErrors) {
-          showSuccess('Split-Horizon configuration is valid');
-        }
-      } catch (error) {
-        showError('Configuration test failed: ' + error.message);
-      }
-    }
-
-    // Render Split-Horizon zones
-    function renderSplitHorizonZones() {
-      const container = document.getElementById('split-horizon-zones');
-      container.innerHTML = '';
-
-      if (splitHorizonConfig.zones.length === 0) {
-        container.innerHTML = '<div style="padding: 40px; text-align: center; color: #a0aec0;">No zones configured for Split-Horizon</div>';
-        return;
-      }
-
-      splitHorizonConfig.zones.forEach((zone, zoneIndex) => {
-        const zoneDiv = document.createElement('div');
-        zoneDiv.className = 'split-horizon-zone';
-
-        zoneDiv.innerHTML = `
-          <div class="zone-header">
-            <div class="zone-name">${zone.name}</div>
-            <button class="zone-remove" onclick="removeSplitHorizonZone(${zoneIndex})">
-              <svg data-lucide="trash-2" style="width: 14px; height: 14px;"></svg>
-              Remove
-            </button>
-          </div>
-          <div class="zone-records">
-            <div class="zone-record-group">
-              <div class="record-group-label">Internal Records (for ${splitHorizonConfig.subnets.internal.join(', ')})</div>
-              <div id="internal-records-${zoneIndex}">
-                ${renderZoneRecords(zone.internal, zoneIndex, 'internal')}
-              </div>
-              <button class="add-record-btn" onclick="addZoneRecord(${zoneIndex}, 'internal')">
-                <svg data-lucide="plus" style="width: 12px; height: 12px;"></svg>
-                Add Internal Record
-              </button>
-            </div>
-            <div class="zone-record-group">
-              <div class="record-group-label">External Records (for ${splitHorizonConfig.subnets.external.join(', ')})</div>
-              <div id="external-records-${zoneIndex}">
-                ${renderZoneRecords(zone.external, zoneIndex, 'external')}
-              </div>
-              <button class="add-record-btn" onclick="addZoneRecord(${zoneIndex}, 'external')">
-                <svg data-lucide="plus" style="width: 12px; height: 12px;"></svg>
-                Add External Record
-              </button>
-            </div>
-          </div>
-        `;
-
-        container.appendChild(zoneDiv);
-      });
-
-      lucide.createIcons();
-    }
-
-    // Render records for a zone
-    function renderZoneRecords(records, zoneIndex, type) {
-      if (!records || records.length === 0) {
-        return '<div style="color: #a0aec0; font-size: 12px; padding: 8px;">No records configured</div>';
-      }
-
-      return records.map((record, recordIndex) => `
-        <div class="record-input-group">
-          <input type="text" class="record-name" value="${record.name}" placeholder="Name (e.g., www)" 
-                 onchange="updateZoneRecord(${zoneIndex}, '${type}', ${recordIndex}, 'name', this.value)">
-          <select class="record-type" onchange="updateZoneRecord(${zoneIndex}, '${type}', ${recordIndex}, 'type', this.value)">
-            <option value="A" ${record.type === 'A' ? 'selected' : ''}>A</option>
-            <option value="AAAA" ${record.type === 'AAAA' ? 'selected' : ''}>AAAA</option>
-            <option value="CNAME" ${record.type === 'CNAME' ? 'selected' : ''}>CNAME</option>
-            <option value="MX" ${record.type === 'MX' ? 'selected' : ''}>MX</option>
-            <option value="TXT" ${record.type === 'TXT' ? 'selected' : ''}>TXT</option>
-          </select>
-          <input type="text" class="record-value" value="${record.value}" placeholder="Value (e.g., 192.168.1.10)"
-                 onchange="updateZoneRecord(${zoneIndex}, '${type}', ${recordIndex}, 'value', this.value)">
-          <button class="record-remove" onclick="removeZoneRecord(${zoneIndex}, '${type}', ${recordIndex})">
-            <svg data-lucide="x" style="width: 12px; height: 12px;"></svg>
-          </button>
-        </div>
-      `).join('');
-    }
-
-    // Add new Split-Horizon zone
-    function addSplitHorizonZone() {
-      const zoneName = prompt('Enter zone name (e.g., example.com):');
-      if (!zoneName) return;
-
-      splitHorizonConfig.zones.push({
-        name: zoneName,
-        internal: [],
-        external: []
-      });
-
-      renderSplitHorizonZones();
-    }
-
-    // Remove Split-Horizon zone
-    function removeSplitHorizonZone(zoneIndex) {
-      if (!confirm('Remove this zone from Split-Horizon configuration?')) return;
-      
-      splitHorizonConfig.zones.splice(zoneIndex, 1);
-      renderSplitHorizonZones();
-    }
-
-    // Add record to zone
-    function addZoneRecord(zoneIndex, type) {
-      const zone = splitHorizonConfig.zones[zoneIndex];
-      if (!zone[type]) zone[type] = [];
-      
-      zone[type].push({
-        name: '',
-        type: 'A',
-        value: ''
-      });
-
-      renderSplitHorizonZones();
-    }
-
-    // Update zone record
-    function updateZoneRecord(zoneIndex, type, recordIndex, field, value) {
-      const zone = splitHorizonConfig.zones[zoneIndex];
-      if (zone[type] && zone[type][recordIndex]) {
-        zone[type][recordIndex][field] = value;
-      }
-    }
-
-    // Remove record from zone
-    function removeZoneRecord(zoneIndex, type, recordIndex) {
-      const zone = splitHorizonConfig.zones[zoneIndex];
-      if (zone[type]) {
-        zone[type].splice(recordIndex, 1);
-        renderSplitHorizonZones();
-      }
-    }
-
-    // Initialize Split-Horizon on page load
-    document.addEventListener('DOMContentLoaded', () => {
-      loadServerInfo();
-      loadApplicationSettings();
-      loadServices();
-      loadSplitHorizonConfig();
-      lucide.createIcons();
-    });
-  </script>
 
   <script>
     // Render icons when page loads

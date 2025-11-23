@@ -681,38 +681,6 @@
         <label style="display: block; font-size: 14px; font-weight: 600; color: #4b5563; margin-bottom: 8px;">Content *</label>
         <textarea id="recordContent" required placeholder="e.g., 192.168.1.1 for A record" style="width: 100%; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 14px; font-family: monospace; min-height: 80px; resize: vertical;"></textarea>
       </div>
-
-      <!-- Split-Horizon Options -->
-      <div style="margin-bottom: 20px; padding: 16px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;">
-        <label style="display: flex; align-items: center; font-size: 14px; font-weight: 600; color: #4b5563; margin-bottom: 12px; cursor: pointer;">
-          <input type="checkbox" id="enableSplitHorizon" style="margin-right: 8px; cursor: pointer;" onchange="toggleSplitHorizonOptions()">
-          <svg data-lucide="git-branch" style="width: 16px; height: 16px; margin-right: 6px;"></svg>
-          Enable Split-Horizon DNS
-          <span id="splitHorizonStatus" style="margin-left: 8px; padding: 2px 6px; border-radius: 10px; font-size: 10px; font-weight: 600; text-transform: uppercase;"></span>
-        </label>
-        
-        <div id="splitHorizonOptions" style="display: none;">
-          <div style="margin-bottom: 12px; padding: 8px; background: #e0e7ff; border-radius: 4px; font-size: 12px; color: #3730a3;">
-            <strong>Split-Horizon:</strong> Different responses for internal vs external clients
-          </div>
-          
-          <div style="margin-bottom: 12px;">
-            <label style="display: block; font-size: 13px; font-weight: 600; color: #4b5563; margin-bottom: 6px;">Internal Content (for private subnets)</label>
-            <textarea id="recordContentInternal" placeholder="Content for internal clients (192.168.x.x, 10.x.x.x, 172.16.x.x)" style="width: 100%; padding: 8px 10px; border: 1px solid #cbd5e0; border-radius: 4px; font-size: 13px; font-family: monospace; min-height: 60px; resize: vertical;"></textarea>
-            <small style="color: #718096; font-size: 11px;">Leave empty to use main content for internal clients</small>
-          </div>
-          
-          <div style="margin-bottom: 12px;">
-            <label style="display: block; font-size: 13px; font-weight: 600; color: #4b5563; margin-bottom: 6px;">External Content (for public internet)</label>
-            <textarea id="recordContentExternal" placeholder="Content for external clients (0.0.0.0/0)" style="width: 100%; padding: 8px 10px; border: 1px solid #cbd5e0; border-radius: 4px; font-size: 13px; font-family: monospace; min-height: 60px; resize: vertical;"></textarea>
-            <small style="color: #718096; font-size: 11px;">Leave empty to use main content for external clients</small>
-          </div>
-          
-          <div style="padding: 8px; background: #fef3c7; border-radius: 4px; font-size: 12px; color: #92400e;" class="split-horizon-note">
-            <strong>Note:</strong> Split-Horizon requires server configuration. Configure subnets in Settings → Split-Horizon DNS.
-          </div>
-        </div>
-      </div>
       
       <div style="display: flex; gap: 12px; justify-content: flex-end;">
         <button type="button" class="btn btn-secondary" onclick="closeAddRecordModal()">Cancel</button>
@@ -887,7 +855,9 @@
     document.getElementById('reverse-zones-table').style.display = 'none';
     
     try {
-      const response = await fetch('/api/servers/localhost/zones');
+      const response = await fetch('/api/servers/localhost/zones', {
+        credentials: 'same-origin'
+      });
       
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`);
@@ -897,7 +867,9 @@
       
       // Fetch individual zone details to get record counts
       const zoneDetailsPromises = zones.map(z => 
-        fetch(`/api/servers/localhost/zones/${z.id}`)
+        fetch(`/api/servers/localhost/zones/${z.id}`, {
+          credentials: 'same-origin'
+        })
           .then(r => r.json())
           .then(detail => ({
             ...z,
@@ -1027,7 +999,8 @@
     
     try {
       const response = await fetch(`/api/servers/localhost/zones/${zoneId}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        credentials: 'same-origin'
       });
       
       if (!response.ok) throw new Error('Failed to delete zone');
@@ -1047,7 +1020,9 @@
   async function viewZoneDetails(zoneId) {
     console.log('viewZoneDetails called with zoneId:', zoneId);
     try {
-      const response = await fetch(`/api/servers/localhost/zones/${zoneId}`);
+      const response = await fetch(`/api/servers/localhost/zones/${zoneId}`, {
+        credentials: 'same-origin'
+      });
       if (!response.ok) throw new Error('Failed to load zone details');
       
       const zone = await response.json();
@@ -1089,9 +1064,13 @@
     const zoneDnssecEl = document.getElementById('zone-info-dnssec');
     if (zoneDnssecEl) zoneDnssecEl.textContent = zone.dnssec ? 'Enabled' : 'Disabled';
     
+    // Check zone details and display
+    
     // Render records
     renderZoneRecords(zone.rrsets || []);
   }
+
+  // Check zone details
 
   function renderZoneRecords(rrsets) {
     const loadingEl = document.getElementById('zone-records-loading');
@@ -1217,6 +1196,7 @@
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'same-origin',
         body: JSON.stringify({
           name: zoneName,
           kind: zoneType,
@@ -1296,6 +1276,7 @@
           headers: {
             'Content-Type': 'application/json',
           },
+          credentials: 'same-origin',
           body: JSON.stringify({
             rrsets: batch
           })
@@ -1391,21 +1372,21 @@
     document.getElementById('addRecordForm').reset();
   }
 
-  // Modified submitAddRecord to handle Split-Horizon
+  // Handle record addition
   async function submitAddRecord(event) {
     event.preventDefault();
-    
+
     const recordName = document.getElementById('recordName').value.trim();
     const recordType = document.getElementById('recordType').value;
     const recordTTL = document.getElementById('recordTTL').value;
     const recordContent = document.getElementById('recordContent').value.trim();
     const zoneId = appState.currentZoneId;
-    
+
     if (!zoneId || !recordName || !recordType || !recordTTL || !recordContent) {
       showError('Please fill in all required fields');
       return;
     }
-    
+
     try {
       // Find the zone to get its name
       const zones = appState.zones;
@@ -1413,12 +1394,7 @@
       if (!zone) {
         throw new Error('Zone not found');
       }
-      
-      // Check if Split-Horizon is enabled
-      const splitHorizonEnabled = document.getElementById('enableSplitHorizon').checked;
-      const internalContent = document.getElementById('recordContentInternal').value.trim();
-      const externalContent = document.getElementById('recordContentExternal').value.trim();
-      
+
       // Validate record content based on type
       let validatedContent = recordContent;
       if (recordType === 'NS') {
@@ -1431,7 +1407,7 @@
           throw new Error('NS record content must be a valid FQDN (fully qualified domain name) ending with a dot');
         }
       }
-      
+
       // Build full record name (FQDN)
       let fullName = recordName;
       if (!recordName.endsWith('.')) {
@@ -1441,7 +1417,7 @@
         } else {
           // Check if this is a reverse zone (in-addr.arpa)
           if (zone.name.includes('in-addr.arpa')) {
-            // For reverse zones, if recordName is an IP address part (like "1"), 
+            // For reverse zones, if recordName is an IP address part (like "1"),
             // prepend it directly to the zone name
             // e.g., "1" + "214.142.103.in-addr.arpa." = "1.214.142.103.in-addr.arpa."
             fullName = recordName + '.' + zone.name;
@@ -1451,93 +1427,56 @@
           }
         }
       }
-      
-      // Handle Split-Horizon records
-      let rrsets = [];
-      
-      if (splitHorizonEnabled && (internalContent || externalContent)) {
-        // Check if global Split-Horizon is enabled
-        const globalSplitHorizon = await checkSplitHorizonEnabled();
-        if (!globalSplitHorizon) {
-          throw new Error('Split-Horizon is not enabled globally. Please enable it in Settings → Split-Horizon DNS first.');
-        }
-        
-        // Create separate rrsets for internal and external
-        if (internalContent) {
-          rrsets.push({
-            name: fullName,
-            type: recordType,
-            ttl: parseInt(recordTTL),
-            changetype: 'REPLACE',
-            records: [{
-              content: internalContent,
-              disabled: false
-            }]
+
+      // Handle NS records specially (they can have multiple values)
+      let records = [{
+        content: validatedContent,
+        disabled: false
+      }];
+
+      if (recordType === 'NS') {
+        try {
+          // Check if NS record already exists
+          const existingResponse = await fetch(`/api/servers/localhost/zones/${zoneId}`, {
+            credentials: 'same-origin'
           });
-        }
-        
-        if (externalContent) {
-          rrsets.push({
-            name: fullName,
-            type: recordType,
-            ttl: parseInt(recordTTL),
-            changetype: 'REPLACE',
-            records: [{
-              content: externalContent,
+          const zoneData = await existingResponse.json();
+
+          const existingNSRecords = zoneData.rrsets?.find(rrset =>
+            rrset.name === fullName && rrset.type === 'NS'
+          );
+
+          if (existingNSRecords && existingNSRecords.records) {
+            // Add new record to existing ones
+            records = [...existingNSRecords.records, {
+              content: validatedContent,
               disabled: false
-            }]
-          });
-        }
-      } else {
-        // Standard record creation
-        let records = [{
-          content: validatedContent,
-          disabled: false
-        }];
-        
-        // Special handling for NS records - allow multiple nameservers
-        if (recordType === 'NS') {
-          try {
-            // Get existing zone data to check for existing NS records
-            const zoneResponse = await fetch(`/api/servers/localhost/zones/${zoneId}`);
-            if (zoneResponse.ok) {
-              const zoneData = await zoneResponse.json();
-              const existingNSRecords = zoneData.rrsets?.find(rrset => 
-                rrset.name === fullName && rrset.type === 'NS'
-              );
-              
-              if (existingNSRecords && existingNSRecords.records) {
-                // Add new record to existing ones
-                records = [...existingNSRecords.records, {
-                  content: validatedContent,
-                  disabled: false
-                }];
-              }
-            }
-          } catch (error) {
-            console.warn('Could not fetch existing NS records, proceeding with single record:', error);
+            }];
           }
+        } catch (error) {
+          console.warn('Could not fetch existing NS records, proceeding with single record:', error);
         }
-        
-        rrsets = [{
-          name: fullName,
-          type: recordType,
-          ttl: parseInt(recordTTL),
-          changetype: 'REPLACE',
-          records: records
-        }];
       }
-      
+
+      const rrsets = [{
+        name: fullName,
+        type: recordType,
+        ttl: parseInt(recordTTL),
+        changetype: 'REPLACE',
+        records: records
+      }];
+
       const payload = { rrsets };
-      
+
       const response = await fetch(`/api/servers/localhost/zones/${zoneId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'same-origin',
         body: JSON.stringify(payload)
       });
-      
+
       if (!response.ok) {
         const responseText = await response.text();
         try {
@@ -1548,7 +1487,7 @@
           throw new Error(`API Error ${response.status}: ${responseText}`);
         }
       }
-      
+
       closeAddRecordModal();
       // Reload zone details
       await viewZoneDetails(zoneId);
@@ -1619,6 +1558,7 @@
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'same-origin',
         body: JSON.stringify(payload)
       });
       
@@ -1659,7 +1599,9 @@
       let remainingRecords = [];
       
       // Get existing zone data to find all records for this name/type
-      const zoneResponse = await fetch(`/api/servers/localhost/zones/${zoneId}`);
+      const zoneResponse = await fetch(`/api/servers/localhost/zones/${zoneId}`, {
+        credentials: 'same-origin'
+      });
       if (zoneResponse.ok) {
         const zoneData = await zoneResponse.json();
         const existingRrset = zoneData.rrsets?.find(rrset => 
@@ -1702,6 +1644,7 @@
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'same-origin',
         body: JSON.stringify(payload)
       });
       
@@ -1725,300 +1668,12 @@
     }
   }
 
-  // Initialize Split-Horizon checkbox event listener
+  // Initialize on page load
   document.addEventListener('DOMContentLoaded', function() {
-    const splitHorizonCheckbox = document.getElementById('enableSplitHorizon');
-    if (splitHorizonCheckbox) {
-      splitHorizonCheckbox.addEventListener('change', toggleSplitHorizonOptions);
-      // Initialize state
-      toggleSplitHorizonOptions();
-    }
-    
-    // Refresh Split-Horizon state on page load
-    refreshSplitHorizonState();
-    
-    // Listen for storage events (when settings change)
-    window.addEventListener('storage', function(e) {
-      if (e.key === 'splitHorizonConfigChanged') {
-        refreshSplitHorizonState();
-      }
-    });
-    
-    // Also listen for custom events
-    window.addEventListener('splitHorizonConfigChanged', function() {
-      refreshSplitHorizonState();
-    });
-    
-    // Add a refresh button or periodic check
-    addSplitHorizonRefreshButton();
+    loadZones();
+    lucide.createIcons();
   });
-
-  // Add a refresh button for Split-Horizon status
-  function addSplitHorizonRefreshButton() {
-    const splitHorizonSection = document.querySelector('.split-horizon-section');
-    if (splitHorizonSection) {
-      // Look for existing refresh button or add one
-      let refreshBtn = splitHorizonSection.querySelector('.split-horizon-refresh');
-      if (!refreshBtn) {
-        const header = splitHorizonSection.querySelector('h4') || splitHorizonSection.querySelector('strong');
-        if (header) {
-          refreshBtn = document.createElement('button');
-          refreshBtn.className = 'split-horizon-refresh';
-          refreshBtn.innerHTML = '<svg data-lucide="refresh-cw" style="width: 14px; height: 14px;"></svg>';
-          refreshBtn.style.cssText = 'background: none; border: none; color: #718096; cursor: pointer; padding: 4px; border-radius: 4px; margin-left: 8px;';
-          refreshBtn.title = 'Refresh Split-Horizon status';
-          refreshBtn.onclick = refreshSplitHorizonState;
-          
-          header.appendChild(refreshBtn);
-          lucide.createIcons();
-        }
-      }
-    }
-  }
 </script>
-
-<script>
-  // Split-Horizon functions for zones
-  function toggleSplitHorizonOptions() {
-    const checkbox = document.getElementById('enableSplitHorizon');
-    const options = document.getElementById('splitHorizonOptions');
-    
-    if (checkbox.checked) {
-      options.style.display = 'block';
-    } else {
-      options.style.display = 'none';
-      // Clear split-horizon fields when disabled
-      document.getElementById('recordContentInternal').value = '';
-      document.getElementById('recordContentExternal').value = '';
-    }
-  }
-
-  async function checkSplitHorizonEnabled() {
-    try {
-      const response = await fetch('/api/split-horizon/config');
-      const config = await response.json();
-      return config.enabled;
-    } catch (error) {
-      console.error('Error checking split-horizon status:', error);
-      return false;
-    }
-  }
-
-  // Refresh Split-Horizon UI state
-  async function refreshSplitHorizonState() {
-    try {
-      const response = await fetch('/api/split-horizon/config');
-      const config = await response.json();
-      
-      const checkbox = document.getElementById('enableSplitHorizon');
-      const statusBadge = document.getElementById('splitHorizonStatus');
-      
-      if (checkbox) {
-        checkbox.checked = config.enabled;
-        // Update the UI state
-        toggleSplitHorizonOptions();
-        
-        // Update status badge
-        if (statusBadge) {
-          if (config.enabled) {
-            statusBadge.textContent = 'Enabled';
-            statusBadge.style.backgroundColor = '#c6f6d5';
-            statusBadge.style.color = '#22543d';
-          } else {
-            statusBadge.textContent = 'Disabled';
-            statusBadge.style.backgroundColor = '#fed7d7';
-            statusBadge.style.color = '#742a2a';
-          }
-        }
-        
-        // Update the note text based on configuration
-        const noteElement = document.querySelector('.split-horizon-note');
-        if (noteElement) {
-          if (config.enabled) {
-            noteElement.innerHTML = '<strong>Status:</strong> Split-Horizon is enabled. Configure different responses for internal vs external clients.';
-            noteElement.style.backgroundColor = '#c6f6d5';
-            noteElement.style.color = '#22543d';
-            noteElement.style.border = '1px solid #9ae6b4';
-          } else {
-            noteElement.innerHTML = '<strong>Note:</strong> Split-Horizon is disabled. Enable it in Settings → Split-Horizon DNS to use this feature.';
-            noteElement.style.backgroundColor = '#fef3c7';
-            noteElement.style.color = '#92400e';
-            noteElement.style.border = '1px solid #f6e05e';
-          }
-        }
-      }
-    } catch (error) {
-      console.error('Error refreshing split-horizon state:', error);
-    }
-  }
-
-  // Modified submitAddRecord to handle Split-Horizon
-  async function submitAddRecord(event) {
-    event.preventDefault();
-    
-    const recordName = document.getElementById('recordName').value.trim();
-    const recordType = document.getElementById('recordType').value;
-    const recordTTL = document.getElementById('recordTTL').value;
-    const recordContent = document.getElementById('recordContent').value.trim();
-    const zoneId = appState.currentZoneId;
-    
-    if (!zoneId || !recordName || !recordType || !recordTTL || !recordContent) {
-      showError('Please fill in all required fields');
-      return;
-    }
-    
-    try {
-      // Find the zone to get its name
-      const zones = appState.zones;
-      const zone = zones.find(z => z.id === zoneId);
-      if (!zone) {
-        throw new Error('Zone not found');
-      }
-      
-      // Check if Split-Horizon is enabled
-      const splitHorizonEnabled = document.getElementById('enableSplitHorizon').checked;
-      const internalContent = document.getElementById('recordContentInternal').value.trim();
-      const externalContent = document.getElementById('recordContentExternal').value.trim();
-      
-      // Validate record content based on type
-      let validatedContent = recordContent;
-      if (recordType === 'NS') {
-        // NS records must be FQDN with trailing dot
-        if (!validatedContent.endsWith('.')) {
-          validatedContent = validatedContent + '.';
-        }
-        // Basic validation for FQDN format
-        if (!/^[a-zA-Z0-9.-]+\.$/.test(validatedContent)) {
-          throw new Error('NS record content must be a valid FQDN (fully qualified domain name) ending with a dot');
-        }
-      }
-      
-      // Build full record name (FQDN)
-      let fullName = recordName;
-      if (!recordName.endsWith('.')) {
-        // Handle "@" as shorthand for root domain
-        if (recordName === '@') {
-          fullName = zone.name;
-        } else {
-          // Check if this is a reverse zone (in-addr.arpa)
-          if (zone.name.includes('in-addr.arpa')) {
-            // For reverse zones, if recordName is an IP address part (like "1"), 
-            // prepend it directly to the zone name
-            // e.g., "1" + "214.142.103.in-addr.arpa." = "1.214.142.103.in-addr.arpa."
-            fullName = recordName + '.' + zone.name;
-          } else {
-            // For forward zones, append zone name normally
-            fullName = recordName + '.' + zone.name;
-          }
-        }
-      }
-      
-      // Handle Split-Horizon records
-      let rrsets = [];
-      
-      if (splitHorizonEnabled && (internalContent || externalContent)) {
-        // Check if global Split-Horizon is enabled
-        const globalSplitHorizon = await checkSplitHorizonEnabled();
-        if (!globalSplitHorizon) {
-          throw new Error('Split-Horizon is not enabled globally. Please enable it in Settings → Split-Horizon DNS first.');
-        }
-        
-        // Create separate rrsets for internal and external
-        if (internalContent) {
-          rrsets.push({
-            name: fullName,
-            type: recordType,
-            ttl: parseInt(recordTTL),
-            changetype: 'REPLACE',
-            records: [{
-              content: internalContent,
-              disabled: false
-            }]
-          });
-        }
-        
-        if (externalContent) {
-          rrsets.push({
-            name: fullName,
-            type: recordType,
-            ttl: parseInt(recordTTL),
-            changetype: 'REPLACE',
-            records: [{
-              content: externalContent,
-              disabled: false
-            }]
-          });
-        }
-      } else {
-        // Standard record creation
-        let records = [{
-          content: validatedContent,
-          disabled: false
-        }];
-        
-        // Special handling for NS records - allow multiple nameservers
-        if (recordType === 'NS') {
-          try {
-            // Get existing zone data to check for existing NS records
-            const zoneResponse = await fetch(`/api/servers/localhost/zones/${zoneId}`);
-            if (zoneResponse.ok) {
-              const zoneData = await zoneResponse.json();
-              const existingNSRecords = zoneData.rrsets?.find(rrset => 
-                rrset.name === fullName && rrset.type === 'NS'
-              );
-              
-              if (existingNSRecords && existingNSRecords.records) {
-                // Add new record to existing ones
-                records = [...existingNSRecords.records, {
-                  content: validatedContent,
-                  disabled: false
-                }];
-              }
-            }
-          } catch (error) {
-            console.warn('Could not fetch existing NS records, proceeding with single record:', error);
-          }
-        }
-        
-        rrsets = [{
-          name: fullName,
-          type: recordType,
-          ttl: parseInt(recordTTL),
-          changetype: 'REPLACE',
-          records: records
-        }];
-      }
-      
-      const payload = { rrsets };
-      
-      const response = await fetch(`/api/servers/localhost/zones/${zoneId}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload)
-      });
-      
-      if (!response.ok) {
-        const responseText = await response.text();
-        try {
-          const error = JSON.parse(responseText);
-          throw new Error(error.error || error.message || `API Error: ${response.status}`);
-        } catch (e) {
-          if (e.message && e.message.includes('API Error')) throw e;
-          throw new Error(`API Error ${response.status}: ${responseText}`);
-        }
-      }
-      
-      closeAddRecordModal();
-      // Reload zone details
-      await viewZoneDetails(zoneId);
-      showError('Record added successfully!', 'success');
-    } catch (error) {
-      console.error('Error adding record:', error);
-      showError(error.message);
-    }
-  }
 
 <script>
   // Render icons when page loads

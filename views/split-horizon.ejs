@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+    }
+
+    .main-container {
+      display: flex;
+      width: 100%;
+      height: 100vh;
+    }
+
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      background: #f7fafc;
+    }
+
+    .content-wrapper {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    header {
+      background: white;
+      padding: 20px 30px;
+      margin-bottom: 30px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #1a202c;
+    }
+
+    header svg {
+      width: 32px;
+      height: 32px;
+      color: #667eea;
+    }
+
+    .settings-section {
+      background: white;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1a202c;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    .setting-group {
+      margin-bottom: 24px;
+    }
+
+    .setting-group:last-child {
+      margin-bottom: 0;
+    }
+
+    .setting-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #4b5563;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .setting-label .required {
+      color: #dc2626;
+    }
+
+    .setting-description {
+      font-size: 13px;
+      color: #718096;
+      margin-top: 4px;
+    }
+
+    .info-box {
+      background: #ebf8ff;
+      border: 1px solid #90cdf4;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .info-box svg {
+      width: 20px;
+      height: 20px;
+      color: #3182ce;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .info-box p {
+      margin: 0;
+      color: #2c5282;
+      line-height: 1.5;
+    }
+
+    textarea, input[type="text"], input[type="password"] {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      font-size: 14px;
+      transition: border-color 0.2s;
+    }
+
+    textarea:focus, input[type="text"]:focus, input[type="password"]:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: #667eea;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #5a67d8;
+    }
+
+    .btn-secondary {
+      background: #e2e8f0;
+      color: #4b5563;
+    }
+
+    .btn-secondary:hover {
+      background: #cbd5e0;
+    }
+
+    .btn-danger {
+      background: #fc8181;
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #f56565;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      margin-top: 24px;
+    }
+
+    /* Split-Horizon Styles */
+    .split-horizon-zones {
+      margin-top: 16px;
+    }
+
+    .split-horizon-zone {
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+      background: #f8fafc;
+    }
+
+    .zone-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .zone-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: #2d3748;
+    }
+
+    .zone-remove {
+      background: none;
+      border: none;
+      color: #fc8181;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+
+    .zone-remove:hover {
+      background: #fed7d7;
+    }
+
+    .zone-records {
+      display: flex;
+      gap: 20px;
+    }
+
+    .zone-record-group {
+      flex: 1;
+    }
+
+    .record-group-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #4b5563;
+      margin-bottom: 8px;
+    }
+
+    .record-input-group {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+      align-items: center;
+    }
+
+    .record-name, .record-type {
+      padding: 6px 8px;
+      border: 1px solid #e2e8f0;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+
+    .record-name {
+      flex: 2;
+    }
+
+    .record-type {
+      flex: 1;
+    }
+
+    .record-value {
+      flex: 2;
+    }
+
+    .record-remove {
+      background: none;
+      border: none;
+      color: #fc8181;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 4px;
+    }
+
+    .record-remove:hover {
+      background: #fed7d7;
+    }
+
+    .add-record-btn {
+      background: #e6fffa;
+      color: #234e52;
+      border: 1px solid #b2f5ea;
+      padding: 6px 12px;
+      font-size: 12px;
+      margin-top: 8px;
+    }
+
+    .add-record-btn:hover {
+      background: #b2f5ea;
+    }
+
+    .split-horizon-examples {
+      margin-top: 16px;
+    }
+
+    .example-item {
+      background: #f7fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+
+    .example-item h4 {
+      margin: 0 0 4px 0;
+      font-size: 14px;
+      font-weight: 600;
+      color: #2d3748;
+    }
+
+    .example-item p {
+      margin: 0;
+      font-size: 12px;
+      color: #718096;
+    }
+
+    .example-item small {
+      display: block;
+      margin-top: 4px;
+      font-size: 11px;
+      color: #a0aec0;
+    }
+
+    .alert {
+      padding: 12px 16px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .alert-success {
+      background: #f0fff4;
+      border: 1px solid #9ae6b4;
+      color: #22543d;
+    }
+
+    .alert-error {
+      background: #fed7d7;
+      border: 1px solid #fc8181;
+      color: #742a2a;
+    }
+
+    .alert svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    @media (max-width: 768px) {
+      .content-wrapper {
+        padding: 20px 15px;
+      }
+
+      .zone-records {
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .record-input-group {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .record-name, .record-type, .record-value {
+        flex: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <%- include('./partials/sidebar.ejs', { currentPage: 'split-horizon' }) %>
+
+  <div class="content">
+    <div class="content-wrapper">
+      <header>
+        <svg data-lucide="git-branch"></svg>
+        <h1>Split-Horizon DNS</h1>
+      </header>
+
+      <div class="settings-section">
+        <h2 class="section-title">Split-Horizon DNS Configuration</h2>
+
+        <div class="info-box">
+          <svg data-lucide="git-branch"></svg>
+          <p>Split-Horizon DNS allows different DNS responses based on client subnet. Configure internal vs external responses for enhanced security and performance.</p>
+        </div>
+
+        <!-- Enable/Disable Split-Horizon -->
+        <div class="setting-group">
+          <label class="setting-label">
+            <input type="checkbox" id="split-horizon-enabled" style="width: auto; margin-right: 8px; cursor: pointer;">
+            Enable Split-Horizon DNS
+          </label>
+          <div class="setting-description">Enable different DNS responses based on client IP subnets</div>
+        </div>
+
+        <!-- Subnet Configuration -->
+        <div class="setting-group">
+          <label class="setting-label">Internal Subnets</label>
+          <div class="setting-description">IP subnets considered as internal network (comma-separated CIDR notation)</div>
+          <textarea id="internal-subnets" rows="3" placeholder="192.168.0.0/16, 10.0.0.0/8, 172.16.0.0/12">192.168.0.0/16, 10.0.0.0/8, 172.16.0.0/12</textarea>
+        </div>
+
+        <div class="setting-group">
+          <label class="setting-label">External Subnets</label>
+          <div class="setting-description">IP subnets considered as external network (default: 0.0.0.0/0)</div>
+          <textarea id="external-subnets" rows="2" placeholder="0.0.0.0/0">0.0.0.0/0</textarea>
+        </div>
+
+        <!-- Zone-specific Split-Horizon -->
+        <div class="setting-group">
+          <label class="setting-label">Zone Configuration</label>
+          <div class="setting-description">Configure zones with different records for internal and external clients</div>
+
+          <div class="split-horizon-zones" id="split-horizon-zones">
+            <!-- Zone configurations will be loaded here -->
+          </div>
+
+          <button class="btn btn-secondary" onclick="addSplitHorizonZone()" style="margin-top: 12px;">
+            <svg data-lucide="plus" style="width: 16px; height: 16px;"></svg>
+            Add Zone Configuration
+          </button>
+        </div>
+
+        <!-- Configuration Examples -->
+        <div class="setting-group">
+          <label class="setting-label">Configuration Examples</label>
+          <div class="split-horizon-examples">
+            <div class="example-item">
+              <h4>Internal vs External A Records</h4>
+              <p>Internal clients get <code>192.168.1.10</code>, external clients get <code>203.0.113.10</code></p>
+              <small>Useful for web servers with internal and external IPs</small>
+            </div>
+
+            <div class="example-item">
+              <h4>Internal Mail Server</h4>
+              <p>Internal clients use <code>mail.internal.company.com</code>, external use <code>mail.company.com</code></p>
+              <small>Route internal traffic through internal infrastructure</small>
+            </div>
+
+            <div class="example-item">
+              <h4>VPN Access</h4>
+              <p>VPN clients get internal IPs, public clients get external IPs</p>
+              <small>Optimize routing for VPN vs internet traffic</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="button-group">
+          <button class="btn btn-primary" onclick="saveSplitHorizonConfig()">
+            <svg data-lucide="save" style="width: 16px; height: 16px;"></svg>
+            Save Configuration
+          </button>
+          <button class="btn btn-secondary" onclick="testSplitHorizonConfig()">
+            <svg data-lucide="play" style="width: 16px; height: 16px;"></svg>
+            Test Configuration
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Split-Horizon Management Functions
+    let splitHorizonConfig = {
+      enabled: false,
+      zones: [],
+      subnets: {
+        internal: ['192.168.0.0/16', '10.0.0.0/8', '172.16.0.0/12'],
+        external: ['0.0.0.0/0']
+      }
+    };
+
+    // Load Split-Horizon configuration
+    async function loadSplitHorizonConfig() {
+      try {
+        const response = await fetch('/api/split-horizon/config', {
+          credentials: 'same-origin'
+        });
+        const config = await response.json();
+        splitHorizonConfig = config;
+
+        // Update UI
+        document.getElementById('split-horizon-enabled').checked = config.enabled;
+        document.getElementById('internal-subnets').value = config.subnets.internal.join(', ');
+        document.getElementById('external-subnets').value = config.subnets.external.join(', ');
+
+        // Render zones
+        renderSplitHorizonZones();
+      } catch (error) {
+        console.error('Error loading split-horizon config:', error);
+        showError('Failed to load Split-Horizon configuration');
+      }
+    }
+
+    // Save Split-Horizon configuration
+    async function saveSplitHorizonConfig() {
+      try {
+        // Collect data from UI
+        splitHorizonConfig.enabled = document.getElementById('split-horizon-enabled').checked;
+        splitHorizonConfig.subnets.internal = document.getElementById('internal-subnets').value
+          .split(',')
+          .map(s => s.trim())
+          .filter(s => s);
+        splitHorizonConfig.subnets.external = document.getElementById('external-subnets').value
+          .split(',')
+          .map(s => s.trim())
+          .filter(s => s);
+
+        const response = await fetch('/api/split-horizon/config', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'same-origin',
+          body: JSON.stringify(splitHorizonConfig)
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to save configuration');
+        }
+
+        showSuccess('Split-Horizon configuration saved successfully');
+
+        // Notify other pages that configuration has changed
+        localStorage.setItem('splitHorizonConfigChanged', Date.now().toString());
+        window.dispatchEvent(new CustomEvent('splitHorizonConfigChanged'));
+      } catch (error) {
+        showError('Failed to save Split-Horizon configuration: ' + error.message);
+      }
+    }
+
+    // Test Split-Horizon configuration
+    async function testSplitHorizonConfig() {
+      try {
+        // Basic validation
+        const internalSubnets = document.getElementById('internal-subnets').value
+          .split(',')
+          .map(s => s.trim())
+          .filter(s => s);
+
+        const externalSubnets = document.getElementById('external-subnets').value
+          .split(',')
+          .map(s => s.trim())
+          .filter(s => s);
+
+        if (internalSubnets.length === 0) {
+          throw new Error('At least one internal subnet is required');
+        }
+
+        if (externalSubnets.length === 0) {
+          throw new Error('At least one external subnet is required');
+        }
+
+        // Test CIDR validation
+        for (const subnet of [...internalSubnets, ...externalSubnets]) {
+          if (!isValidCIDR(subnet)) {
+            throw new Error(`Invalid CIDR notation: ${subnet}`);
+          }
+        }
+
+        showSuccess('Configuration validation passed');
+      } catch (error) {
+        showError('Configuration test failed: ' + error.message);
+      }
+    }
+
+    // CIDR validation helper
+    function isValidCIDR(cidr) {
+      const parts = cidr.split('/');
+      if (parts.length !== 2) return false;
+
+      const ip = parts[0];
+      const prefix = parseInt(parts[1]);
+
+      if (prefix < 0 || prefix > 32) return false;
+
+      const ipParts = ip.split('.');
+      if (ipParts.length !== 4) return false;
+
+      for (const part of ipParts) {
+        const num = parseInt(part);
+        if (num < 0 || num > 255) return false;
+      }
+
+      return true;
+    }
+
+    // Render Split-Horizon zones
+    function renderSplitHorizonZones() {
+      const container = document.getElementById('split-horizon-zones');
+      container.innerHTML = '';
+
+      if (splitHorizonConfig.zones.length === 0) {
+        container.innerHTML = '<div style="padding: 40px; text-align: center; color: #a0aec0;">No zones configured for Split-Horizon</div>';
+        return;
+      }
+
+      splitHorizonConfig.zones.forEach((zone, zoneIndex) => {
+        const zoneDiv = document.createElement('div');
+        zoneDiv.className = 'split-horizon-zone';
+
+        zoneDiv.innerHTML = `
+          <div class="zone-header">
+            <div class="zone-name">${zone.name}</div>
+            <button class="zone-remove" onclick="removeSplitHorizonZone(${zoneIndex})">
+              <svg data-lucide="trash-2" style="width: 14px; height: 14px;"></svg>
+              Remove
+            </button>
+          </div>
+          <div class="zone-records">
+            <div class="zone-record-group">
+              <div class="record-group-label">Internal Records (for ${splitHorizonConfig.subnets.internal.join(', ')})</div>
+              <div id="internal-records-${zoneIndex}">
+                ${renderZoneRecords(zone.internal, zoneIndex, 'internal')}
+              </div>
+              <button class="add-record-btn" onclick="addZoneRecord(${zoneIndex}, 'internal')">
+                <svg data-lucide="plus" style="width: 12px; height: 12px;"></svg>
+                Add Internal Record
+              </button>
+            </div>
+            <div class="zone-record-group">
+              <div class="record-group-label">External Records (for ${splitHorizonConfig.subnets.external.join(', ')})</div>
+              <div id="external-records-${zoneIndex}">
+                ${renderZoneRecords(zone.external, zoneIndex, 'external')}
+              </div>
+              <button class="add-record-btn" onclick="addZoneRecord(${zoneIndex}, 'external')">
+                <svg data-lucide="plus" style="width: 12px; height: 12px;"></svg>
+                Add External Record
+              </button>
+            </div>
+          </div>
+        `;
+
+        container.appendChild(zoneDiv);
+      });
+
+      lucide.createIcons();
+    }
+
+    // Render records for a zone
+    function renderZoneRecords(records, zoneIndex, type) {
+      if (!records || records.length === 0) {
+        return '<div style="color: #a0aec0; font-size: 12px; padding: 8px;">No records configured</div>';
+      }
+
+      return records.map((record, recordIndex) => `
+        <div class="record-input-group">
+          <input type="text" class="record-name" value="${record.name}" placeholder="Name (e.g., www)"
+                 onchange="updateZoneRecord(${zoneIndex}, '${type}', ${recordIndex}, 'name', this.value)">
+          <select class="record-type" onchange="updateZoneRecord(${zoneIndex}, '${type}', ${recordIndex}, 'type', this.value)">
+            <option value="A" ${record.type === 'A' ? 'selected' : ''}>A</option>
+            <option value="AAAA" ${record.type === 'AAAA' ? 'selected' : ''}>AAAA</option>
+            <option value="CNAME" ${record.type === 'CNAME' ? 'selected' : ''}>CNAME</option>
+            <option value="MX" ${record.type === 'MX' ? 'selected' : ''}>MX</option>
+            <option value="TXT" ${record.type === 'TXT' ? 'selected' : ''}>TXT</option>
+          </select>
+          <input type="text" class="record-value" value="${record.value}" placeholder="Value"
+                 onchange="updateZoneRecord(${zoneIndex}, '${type}', ${recordIndex}, 'value', this.value)">
+          <button class="record-remove" onclick="removeZoneRecord(${zoneIndex}, '${type}', ${recordIndex})">
+            <svg data-lucide="x" style="width: 12px; height: 12px;"></svg>
+          </button>
+        </div>
+      `).join('');
+    }
+
+    // Add new Split-Horizon zone
+    function addSplitHorizonZone() {
+      const zoneName = prompt('Enter zone name (e.g., example.com):');
+      if (!zoneName) return;
+
+      splitHorizonConfig.zones.push({
+        name: zoneName,
+        internal: [],
+        external: []
+      });
+
+      renderSplitHorizonZones();
+    }
+
+    // Remove Split-Horizon zone
+    function removeSplitHorizonZone(zoneIndex) {
+      if (!confirm('Remove this zone from Split-Horizon configuration?')) return;
+
+      splitHorizonConfig.zones.splice(zoneIndex, 1);
+      renderSplitHorizonZones();
+    }
+
+    // Add record to zone
+    function addZoneRecord(zoneIndex, type) {
+      const zone = splitHorizonConfig.zones[zoneIndex];
+      if (!zone[type]) zone[type] = [];
+
+      zone[type].push({
+        name: '@',
+        type: 'A',
+        value: type === 'internal' ? '192.168.1.10' : '203.0.113.10'
+      });
+
+      renderSplitHorizonZones();
+    }
+
+    // Update zone record
+    function updateZoneRecord(zoneIndex, type, recordIndex, field, value) {
+      const zone = splitHorizonConfig.zones[zoneIndex];
+      if (zone[type] && zone[type][recordIndex]) {
+        zone[type][recordIndex][field] = value;
+      }
+    }
+
+    // Remove record from zone
+    function removeZoneRecord(zoneIndex, type, recordIndex) {
+      const zone = splitHorizonConfig.zones[zoneIndex];
+      if (zone[type]) {
+        zone[type].splice(recordIndex, 1);
+        renderSplitHorizonZones();
+      }
+    }
+
+    // Alert functions
+    function showSuccess(message) {
+      showAlert(message, 'success');
+    }
+
+    function showError(message) {
+      showAlert(message, 'error');
+    }
+
+    function showAlert(message, type) {
+      // Remove existing alerts
+      const existingAlerts = document.querySelectorAll('.alert');
+      existingAlerts.forEach(alert => alert.remove());
+
+      const alertDiv = document.createElement('div');
+      alertDiv.className = `alert alert-${type}`;
+
+      const iconName = type === 'success' ? 'check-circle' : 'alert-circle';
+      alertDiv.innerHTML = `
+        <svg data-lucide="${iconName}"></svg>
+        <span>${message}</span>
+      `;
+
+      const container = document.querySelector('.content-wrapper');
+      container.insertBefore(alertDiv, container.firstChild);
+
+      lucide.createIcons();
+
+      // Auto-remove after 5 seconds
+      setTimeout(() => {
+        if (alertDiv.parentNode) {
+          alertDiv.remove();
+        }
+      }, 5000);
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      loadSplitHorizonConfig();
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>
